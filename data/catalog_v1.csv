@@ -1,0 +1,51 @@
+product_id,name_en,store,category,price_krw,promo_type,kcal,protein_g,carbs_g,fat_g,sodium_mg,allergens,diet_tags,requires,prep_instructions,description,last_updated,verified
+CU001,Tuna mayo triangle kimbap,CU,triangle_kimbap,1400,none,230,6,38,5,620,egg;soy;wheat;fish,,,,"Triangle rice ball with tuna, triangle kimbap shelf",2026-11-02,false
+CU002,Spicy pork triangle kimbap,CU,triangle_kimbap,1500,1+1,240,7,39,6,700,soy;wheat;pork,,,,"Triangle rice ball, red label, triangle kimbap shelf",2026-11-02,false
+CU003,Beef bulgogi triangle kimbap,CU,triangle_kimbap,1600,none,250,8,40,6,680,soy;wheat;beef,,,,Triangle rice ball with marinated beef,2026-11-02,false
+CU004,Vegetable kimbap roll,CU,kimbap_roll,2500,none,330,8,58,7,780,soy;wheat;egg,vegetarian,,,"Sliced kimbap roll in a tray, chilled shelf",2026-11-02,false
+CU005,Chicken breast bento,CU,bento,4900,none,520,28,62,14,1100,soy;wheat;egg;chicken,,microwave,Microwave 2 min,"Black bento box, hot-food chiller section",2026-11-02,false
+CU006,Bulgogi rice bento,CU,bento,5200,none,600,24,80,18,1250,soy;wheat;beef,,microwave,Microwave 2 min,"Bento box with beef and rice, chiller section",2026-11-02,false
+CU007,Instant white rice 210g,CU,instant_rice,1500,2+1,310,5,69,1,5,,vegetarian,microwave,Microwave 1.5 min,"Plastic cup of cooked rice, shelf near instant food",2026-11-02,false
+CU008,Cup ramyeon spicy,CU,instant_noodle,1300,none,500,10,70,18,1800,wheat;soy,,kettle,"Add hot water, wait 3-4 min","Red cup noodles, instant food shelf",2026-11-02,false
+CU009,Boiled eggs 2-pack,CU,egg,1800,none,150,12,1,10,140,egg,vegetarian,fridge,Eat cold,"Two peeled eggs in a pack, chilled shelf",2026-11-02,false
+CU010,Plain yogurt cup,CU,dairy,1500,none,120,6,16,3,90,milk,vegetarian,fridge,Eat cold,"Small white yogurt cup, dairy fridge",2026-11-02,false
+CU011,Chicken salad box,CU,salad,3900,none,180,16,12,7,450,egg;soy;chicken,,fridge,Eat cold,"Salad box with chicken and dressing, chilled shelf",2026-11-02,false
+CU012,Banana single,CU,fruit,1000,none,90,1,23,0,1,,vegetarian,,,Loose banana near the counter,2026-11-02,false
+CU013,Soy milk 190ml,CU,drink,1200,1+1,110,6,12,4,90,soy,vegetarian,,,"Small carton, drinks fridge",2026-11-02,false
+CU014,Protein bar,CU,snack,2500,none,200,15,20,8,150,milk;soy;nuts,vegetarian,,,"Snack shelf, near the counter",2026-11-02,false
+CU015,Egg salad sandwich,CU,sandwich,2800,none,320,11,34,15,560,egg;wheat;milk,vegetarian,fridge,Eat cold,"Triangle sandwich pack, chilled shelf",2026-11-02,false
+CU016,Seaweed soup cup,CU,soup,1500,none,60,2,8,2,900,soy,,kettle,"Add hot water, wait 3 min","Instant soup cup, instant food shelf",2026-11-02,false
+CU017,Roasted sweet potato pack,CU,vegetable,2000,none,180,2,42,0,20,,vegetarian,microwave,Microwave 1 min,"Packed sweet potato, hot snack area",2026-11-02,false
+GS001,Tuna mayo triangle kimbap,GS25,triangle_kimbap,1500,2+1,230,6,38,5,620,egg;soy;wheat;fish,,,,"Triangle rice ball with tuna, triangle kimbap shelf",2026-11-02,false
+GS002,Spicy chicken triangle kimbap,GS25,triangle_kimbap,1600,none,240,9,38,6,690,soy;wheat;chicken,,,,Triangle rice ball with spicy chicken,2026-11-02,false
+GS003,Kimchi fried rice bento,GS25,bento,4500,none,560,14,90,14,1300,soy;wheat;egg;fish,,microwave,Microwave 2 min,"Bento box, hot-food chiller section",2026-11-02,false
+GS004,Chicken breast salad,GS25,salad,4200,none,200,22,14,6,500,soy;chicken,,fridge,Eat cold,"Salad box, chilled shelf",2026-11-02,false
+GS005,Instant white rice 210g,GS25,instant_rice,1600,none,310,5,69,1,5,,vegetarian,microwave,Microwave 1.5 min,Plastic cup of cooked rice,2026-11-02,false
+GS006,Cup noodle mild,GS25,instant_noodle,1400,none,430,9,62,15,1500,wheat;soy,,kettle,"Add hot water, wait 3 min","Cup noodles, instant food shelf",2026-11-02,false
+GS007,Cheese tteokbokki cup,GS25,tteokbokki,3500,none,420,10,78,8,1400,milk;wheat;soy,,microwave,Microwave 3 min,Cup of rice cakes with cheese sauce,2026-11-02,false
+GS008,Boiled eggs 2-pack,GS25,egg,1700,none,150,12,1,10,140,egg,vegetarian,fridge,Eat cold,"Two peeled eggs, chilled shelf",2026-11-02,false
+GS009,Greek yogurt cup,GS25,dairy,2000,1+1,140,10,12,5,70,milk,vegetarian,fridge,Eat cold,"Thick yogurt cup, dairy fridge",2026-11-02,false
+GS010,Apple single,GS25,fruit,1500,none,95,0,25,0,2,,vegetarian,,,Loose apple near the counter,2026-11-02,false
+GS011,Firm tofu pack,GS25,protein,1800,none,90,9,2,5,10,soy,vegetarian,fridge,Eat cold or with a sauce,"Packaged tofu, chilled shelf",2026-11-02,false
+GS012,Protein shake 330ml,GS25,drink,2800,2+1,150,20,8,3,200,milk,vegetarian,,,"Bottle, drinks fridge",2026-11-02,false
+GS013,Egg sandwich,GS25,sandwich,2700,none,330,12,35,15,580,egg;wheat;milk,vegetarian,fridge,Eat cold,"Sandwich pack, chilled shelf",2026-11-02,false
+GS014,Steamed corn pack,GS25,vegetable,2000,none,160,5,35,2,30,,vegetarian,microwave,Microwave 1 min,"Vacuum-packed corn, chilled shelf",2026-11-02,false
+GS015,Seaweed snack small,GS25,snack,1000,none,60,2,3,5,180,,vegetarian,,,"Small green pack, snack shelf",2026-11-02,false
+GS016,Mixed nuts pack,GS25,snack,1800,none,170,5,6,14,5,nuts,vegetarian,,,"Small nut pack, snack shelf",2026-11-02,false
+GS017,Smoked chicken breast pack,GS25,protein,2900,none,110,22,2,2,600,chicken,,fridge,Eat cold,"Vacuum pack, chilled shelf",2026-11-02,false
+EM001,Tuna mayo triangle kimbap,Emart24,triangle_kimbap,1300,none,225,6,37,5,600,egg;soy;wheat;fish,,,,Triangle rice ball with tuna,2026-11-02,false
+EM002,Beef bulgogi triangle kimbap,Emart24,triangle_kimbap,1500,1+1,250,8,40,6,680,soy;wheat;beef,,,,Triangle rice ball with beef,2026-11-02,false
+EM003,Mixed rice dosirak,Emart24,bento,4300,none,580,20,85,15,1200,soy;wheat;egg;pork,,microwave,Microwave 2 min,"Lunch box with rice and side dishes, chiller section",2026-11-02,false
+EM004,Curry rice retort pack,Emart24,instant_rice,3000,none,420,9,80,8,900,wheat;milk,,microwave,Microwave 2 min,"Pouch of curry with rice, instant food shelf",2026-11-02,false
+EM005,Instant white rice 210g,Emart24,instant_rice,1500,2+1,310,5,69,1,5,,vegetarian,microwave,Microwave 1.5 min,Plastic cup of cooked rice,2026-11-02,false
+EM006,Cup ramyeon,Emart24,instant_noodle,1200,none,480,10,68,17,1700,wheat;soy,,kettle,"Add hot water, wait 3-4 min","Cup noodles, instant food shelf",2026-11-02,false
+EM007,Boiled eggs 2-pack,Emart24,egg,1600,none,150,12,1,10,140,egg,vegetarian,fridge,Eat cold,"Two peeled eggs, chilled shelf",2026-11-02,false
+EM008,Milk 200ml,Emart24,drink,1300,none,130,7,10,7,100,milk,vegetarian,,,"Small carton, drinks fridge",2026-11-02,false
+EM009,Fruit cup,Emart24,fruit,2500,none,80,1,20,0,5,,vegetarian,fridge,Eat cold,"Cup of cut fruit, chilled shelf",2026-11-02,false
+EM010,Garden salad box,Emart24,salad,3500,none,90,3,10,4,200,,vegetarian,fridge,Eat cold,"Salad box with dressing, chilled shelf",2026-11-02,false
+EM011,Flavored chicken breast pack,Emart24,protein,2500,none,120,23,3,2,550,chicken;soy,,fridge,Eat cold,"Vacuum pack, chilled shelf",2026-11-02,false
+EM012,Oatmeal cup,Emart24,breakfast,1800,none,150,5,27,3,100,wheat,vegetarian,kettle,"Add hot water, wait 2 min","Small cup, breakfast shelf",2026-11-02,false
+EM013,Milk bread,Emart24,bread,1800,none,280,7,45,8,300,wheat;milk;egg,vegetarian,,,"Packed bread, bakery shelf",2026-11-02,false
+EM014,String cheese,Emart24,dairy,1200,none,80,6,1,6,200,milk,vegetarian,fridge,Eat cold,"Small cheese stick, dairy fridge",2026-11-02,false
+EM015,Vegetable juice 200ml,Emart24,drink,1500,none,50,1,11,0,60,,vegetarian,,,"Small carton, drinks fridge",2026-11-02,false
+EM016,Kimchi cup small,Emart24,side,1500,none,20,1,3,0,500,fish,,fridge,Eat cold,"Small tub, chilled shelf",2026-11-02,false
