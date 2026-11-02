@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS products (
     prep_instructions TEXT,
     description TEXT NOT NULL,
     last_updated TEXT NOT NULL,
-    verified INTEGER NOT NULL DEFAULT 0
+    verified INTEGER NOT NULL DEFAULT 0,
+    source TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE IF NOT EXISTS users (
     user_id TEXT PRIMARY KEY,
@@ -62,13 +63,16 @@ def init_db(path: str | Path = ":memory:") -> sqlite3.Connection:
 def import_catalog(conn: sqlite3.Connection, csv_path: str | Path) -> int:
     products = load_catalog_csv(csv_path)
     conn.executemany(
-        """INSERT OR REPLACE INTO products VALUES
-           (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+        """INSERT OR REPLACE INTO products
+           (product_id, name_en, store, category, price_krw, promo_type, kcal, protein_g, carbs_g,
+            fat_g, sodium_mg, allergens, diet_tags, requires, prep_instructions, description,
+            last_updated, verified, source)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         [(p.product_id, p.name_en, p.store.value, p.category, p.price_krw, p.promo_type.value,
           p.kcal, p.protein_g, p.carbs_g, p.fat_g, p.sodium_mg,
           json.dumps(p.allergens), json.dumps([d.value for d in p.diet_tags]),
           json.dumps([e.value for e in p.requires]), p.prep_instructions, p.description,
-          p.last_updated, int(p.verified)) for p in products])
+          p.last_updated, int(p.verified), p.source) for p in products])
     conn.commit()
     return len(products)
 

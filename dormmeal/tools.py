@@ -45,6 +45,7 @@ def load_catalog_csv(path: str | Path) -> list[Product]:
                 description=row["description"],
                 last_updated=row["last_updated"],
                 verified=row["verified"].strip().lower() == "true",
+                source=row.get("source", "") or "",
             ))
     return products
 

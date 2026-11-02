@@ -54,6 +54,7 @@ class Product(BaseModel):
     description: str
     last_updated: str
     verified: bool = False  # True once price and nutrition were checked against a real label
+    source: str = ""       # where the values come from (e.g. "label photo 2026-11-05, CU Gangnam")
 
 
 class NutritionTargets(BaseModel):
