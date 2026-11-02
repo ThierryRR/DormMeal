@@ -1,0 +1,35 @@
+# DormMeal (weeks 1-2: data layer and tools)
+
+Convenience-store meal planning agent for international students in Korean dorms.
+This repo currently contains the foundations: schemas, SQLite database, starter catalog,
+deterministic tools (`search_catalog`, `compute_totals`) and tests.
+
+## Setup
+```bash
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements-dev.txt
+pytest -q
+python scripts/load_catalog.py        # creates dormmeal.db from data/catalog_v1.csv
+```
+
+## Structure
+```
+dormmeal/models.py   Pydantic schemas (Product, Constraints, MealPlan, Event, ...)
+dormmeal/db.py       SQLite schema + catalog import
+dormmeal/tools.py    load_catalog_csv, search_catalog, compute_totals (promo logic)
+data/catalog_v1.csv  50 starter products (3 chains)
+tests/               unit + property tests (Hypothesis)
+.github/workflows/   CI: runs pytest on every push
+```
+
+## IMPORTANT: catalog data
+`data/catalog_v1.csv` is a **starter set of estimates** (generic product types, approximate
+prices and nutrition). Every row has `verified = false`. Replace values by real ones
+(store website, shelf label, nutrition label), set `verified = true`, and update `last_updated`.
+Report the verified ratio in your final report.
+
+## Conventions
+- `;` separates list values in CSV (allergens, diet_tags, requires).
+- `requires`: equipment needed to prepare or store the product (microwave, kettle, fridge).
+- Promos: 1+1 -> paid = ceil(q/2); 2+1 -> paid = q - q//3; applied to total weekly quantity.
+- Nutrition always counts all units taken (including free units).
