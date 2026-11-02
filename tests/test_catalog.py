@@ -46,3 +46,24 @@ def test_sqlite_roundtrip(catalog):
     conn = init_db(":memory:")
     assert import_catalog(conn, CSV) == len(catalog)
     assert fetch_catalog(conn) == sorted(catalog, key=lambda p: p.product_id)
+
+
+def test_source_column_is_loaded(catalog):
+    assert all(p.source for p in catalog)
+
+
+def test_validation_report_on_starter_catalog(catalog):
+    from dormmeal.validation import catalog_report
+    r = catalog_report(catalog)
+    assert r["total"] == len(catalog)
+    assert r["verified"] == 0 and r["verified_pct"] == 0
+    assert r["issues"] == []
+
+
+def test_validation_report_detects_problems(catalog):
+    from dormmeal.validation import catalog_report
+    bad = catalog[0].model_copy(update={"kcal": 900, "verified": True, "source": ""})
+    dup = catalog[1].model_copy()
+    r = catalog_report([bad, dup, dup])
+    text = " ".join(r["issues"])
+    assert "duplicated id" in text and "does not match macros" in text and "no source" in text
