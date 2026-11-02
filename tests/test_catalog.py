@@ -1,0 +1,48 @@
+from pathlib import Path
+
+import pytest
+
+from dormmeal.db import fetch_catalog, import_catalog, init_db
+from dormmeal.tools import load_catalog_csv
+
+CSV = Path(__file__).resolve().parent.parent / "data" / "catalog_v1.csv"
+
+
+@pytest.fixture(scope="module")
+def catalog():
+    return load_catalog_csv(CSV)
+
+
+def test_catalog_size(catalog):
+    assert len(catalog) >= 50
+
+
+def test_ids_unique(catalog):
+    ids = [p.product_id for p in catalog]
+    assert len(ids) == len(set(ids))
+
+
+def test_values_are_sane(catalog):
+    for p in catalog:
+        assert p.price_krw > 0, p.product_id
+        assert 0 <= p.kcal <= 1500, p.product_id
+        assert p.sodium_mg <= 5000, p.product_id
+        # macros should roughly explain calories (4/4/9 rule, loose tolerance)
+        est = 4 * p.protein_g + 4 * p.carbs_g + 9 * p.fat_g
+        assert abs(est - p.kcal) <= max(80, 0.35 * p.kcal), f"{p.product_id}: kcal {p.kcal} vs macros {est}"
+
+
+def test_each_store_has_products(catalog):
+    assert {p.store.value for p in catalog} == {"CU", "GS25", "Emart24"}
+
+
+def test_prepared_items_have_instructions(catalog):
+    for p in catalog:
+        if "microwave" in [e.value for e in p.requires] or "kettle" in [e.value for e in p.requires]:
+            assert p.prep_instructions, p.product_id
+
+
+def test_sqlite_roundtrip(catalog):
+    conn = init_db(":memory:")
+    assert import_catalog(conn, CSV) == len(catalog)
+    assert fetch_catalog(conn) == sorted(catalog, key=lambda p: p.product_id)
