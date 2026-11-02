@@ -17,7 +17,10 @@ python scripts/load_catalog.py        # creates dormmeal.db from data/catalog_v1
 dormmeal/models.py   Pydantic schemas (Product, Constraints, MealPlan, Event, ...)
 dormmeal/db.py       SQLite schema + catalog import
 dormmeal/tools.py    load_catalog_csv, search_catalog, compute_totals (promo logic)
+dormmeal/validation.py  catalog quality / progress report
 data/catalog_v1.csv  50 starter products (3 chains)
+scripts/             load_catalog.py, validate_catalog.py
+docs/                DEVELOPMENT_LOG.md (report notes), DATA_COLLECTION_GUIDE.md
 tests/               unit + property tests (Hypothesis)
 .github/workflows/   CI: runs pytest on every push
 ```
@@ -26,10 +29,20 @@ tests/               unit + property tests (Hypothesis)
 `data/catalog_v1.csv` is a **starter set of estimates** (generic product types, approximate
 prices and nutrition). Every row has `verified = false`. Replace values by real ones
 (store website, shelf label, nutrition label), set `verified = true`, and update `last_updated`.
-Report the verified ratio in your final report.
+Run `python scripts/validate_catalog.py` to see progress and the verified ratio (report it in your final report).
+See `docs/DATA_COLLECTION_GUIDE.md`.
 
 ## Conventions
 - `;` separates list values in CSV (allergens, diet_tags, requires).
 - `requires`: equipment needed to prepare or store the product (microwave, kettle, fridge).
 - Promos: 1+1 -> paid = ceil(q/2); 2+1 -> paid = q - q//3; applied to total weekly quantity.
 - Nutrition always counts all units taken (including free units).
+
+## Push to GitHub
+```bash
+# create an empty repository on github.com first (no README), then:
+git remote add origin https://github.com/<your-username>/dormmeal.git
+git push -u origin main
+```
+Commits were made with a placeholder e-mail. Set yours first if needed:
+`git config user.email "you@example.com"` (applies to future commits).
