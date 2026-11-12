@@ -1,0 +1,74 @@
+[
+ {
+  "code": "8801104670876",
+  "product_name": "더:단백 드링크 초코",
+  "product_name_ko": null,
+  "brands": "빙그레",
+  "quantity": null,
+  "serving_size": "250.0g",
+  "per_100": {
+   "energy-kcal_100g": 105,
+   "proteins_100g": 20,
+   "carbohydrates_100g": 2.8,
+   "fat_100g": 0.12,
+   "sodium_100g": 0.048
+  },
+  "url": "https://world.openfoodfacts.org/product/8801104670876",
+  "retrieved": "2026-11-12",
+  "license": "Open Database License (ODbL), Open Food Facts contributors"
+ },
+ {
+  "code": "8801097250079",
+  "product_name": "포카리스웨트",
+  "product_name_ko": "포카리스웨트",
+  "brands": "Pocari Sweat",
+  "quantity": null,
+  "serving_size": "620 ml",
+  "per_100": {
+   "energy-kcal_100g": 25,
+   "proteins_100g": 0,
+   "carbohydrates_100g": 6,
+   "fat_100g": 0,
+   "sodium_100g": 0.05
+  },
+  "url": "https://world.openfoodfacts.org/product/8801097250079",
+  "retrieved": "2026-11-12",
+  "license": "Open Database License (ODbL), Open Food Facts contributors"
+ },
+ {
+  "code": "8801043014984",
+  "product_name": "Neoguri",
+  "product_name_ko": "너구리",
+  "brands": "Nongshim",
+  "quantity": "120g",
+  "serving_size": "120 g",
+  "per_100": {
+   "energy-kcal_100g": 408.333333333333,
+   "proteins_100g": 6.66666666666667,
+   "carbohydrates_100g": 69.1666666666667,
+   "fat_100g": 11.6666666666667,
+   "sodium_100g": 1.46666666666667
+  },
+  "url": "https://world.openfoodfacts.org/product/8801043014984",
+  "retrieved": "2026-11-12",
+  "license": "Open Database License (ODbL), Open Food Facts contributors"
+ },
+ {
+  "code": "8801121768129",
+  "product_name": "소화가 잘되는 우유 오리지널",
+  "product_name_ko": "소화가 잘되는 우유 오리지널",
+  "brands": "매일유업 (주)",
+  "quantity": null,
+  "serving_size": "1 portion (190 ml)",
+  "per_100": {
+   "energy-kcal_100g": 56.3157894736842,
+   "proteins_100g": 3.15789473684211,
+   "carbohydrates_100g": 3.15789473684211,
+   "fat_100g": 3.42105263157895,
+   "sodium_100g": 0.0368421052631579
+  },
+  "url": "https://world.openfoodfacts.org/product/8801121768129",
+  "retrieved": "2026-11-12",
+  "license": "Open Database License (ODbL), Open Food Facts contributors"
+ }
+]

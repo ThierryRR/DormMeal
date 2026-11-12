@@ -136,11 +136,11 @@ def main():
               + (f" | LLM valid={row['llm_only']['valid']} hard_ok={row['llm_only']['hard_ok']}" if use_llm else ""))
     summary = {"dormmeal": summarize(rows, "dormmeal"), "llm_only": summarize(rows, "llm_only"),
                "llm_model": llm.MODEL if use_llm else None, "time_limit_s": a.time_limit,
-               "catalog": "catalog.csv (98 sourced + 150 estimated products)"}
+               "catalog": "catalog.csv"}
     out = Path(__file__).resolve().parent
     (out / "results.json").write_text(json.dumps({"summary": summary, "rows": rows}, indent=2))
     md = ["# Benchmark results", "",
-          f"{a.n} seeded scenarios (seed 42), optimizer time limit {a.time_limit} s, catalog.csv (98 sourced + 150 estimated products).",
+          f"{a.n} seeded scenarios (seed 42), optimizer time limit {a.time_limit} s, catalog.csv.",
           "Both planners are scored by the same Verifier. *Valid* = no violation at all; "
           "*hard constraints OK* = no allergen, equipment, diet, store, budget, variety, structure or unknown-product "
           "violation (nutrition gaps allowed).", "",

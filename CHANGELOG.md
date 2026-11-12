@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.0] - 2026-11-12
+### Added
+- Official KCA convenience-store price survey (460 prices, price.go.kr, 2026-11-06) and Open Food Facts matches
+  in `data/sources/`.
+- Catalog grows to 378 products: 145 sourced (+35 KCA-priced rows, +12 KCA + Open Food Facts rows),
+  83 real products with official price and estimated nutrition, 150 generic estimates.
+- Optimizer: at most one snack / ice cream per day.
+### Not re-run
+- Benchmark and budget sensitivity (still computed on the 248-product catalog).
+
 ## [1.1.0] - 2026-11-12
 ### Added
 - 98 sourced products imported from the research workbook (`scripts/import_excel.py`, `data/catalog_sourced.csv`,
