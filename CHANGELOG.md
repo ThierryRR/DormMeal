@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0] - 2026-11-12
+### Added
+- Catalog extended from 50 to 150 products (50 per chain, 21 categories, 25 promos).
+  New rows are estimates of typical label values: `verified = false`, `source` says so.
+- `notebooks/W10_DormMeal_RAG_FocusGroup.ipynb`: week-10 lab (RAG project agent + simulated focus group).
+### Known gaps
+- Still 0% verified: values must be replaced by real label/shelf readings.
+
 ## [0.2.0] - 2026-11-02
 ### Added
 - `source` field on products (model, CSV, SQLite) for data traceability.

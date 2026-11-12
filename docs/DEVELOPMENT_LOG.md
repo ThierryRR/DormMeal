@@ -41,7 +41,7 @@ Not in scope yet: Verifier, CP-SAT optimizer, LangGraph agent, Streamlit UI (wee
 - **Why estimates must be replaced.** A third-party calorie site lists a CU tuna-mayo triangle kimbap at about 189 kcal for 105 g, while the starter estimate in this repo is 230 kcal. Third-party sites are not authoritative, but the gap shows the starter values are unreliable. Source: https://geniet.co.kr/review/42879
 
 ## 6. Limitations (state them in the report)
-- All 50 catalog rows are estimates (`verified = false`). No public price/nutrition API exists for the chains, and web sources found were scattered and user-generated, so verified data requires manual collection from labels and shelf tags.
+- All 150 catalog rows are estimates (50 starter rows + 100 added on 2026-11-12) (`verified = false`). No public price/nutrition API exists for the chains, and web sources found were scattered and user-generated, so verified data requires manual collection from labels and shelf tags.
 - Prices and promos vary by store and month; the catalog is a dated snapshot.
 - Only 1+1 and 2+1 promos are modelled; bundle deals, discounts and 1+2 are not.
 - `vegetarian` tags are conservative; no `halal_friendly` tag is assigned because certification cannot be verified.

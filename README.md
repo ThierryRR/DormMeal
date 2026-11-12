@@ -18,15 +18,16 @@ dormmeal/models.py   Pydantic schemas (Product, Constraints, MealPlan, Event, ..
 dormmeal/db.py       SQLite schema + catalog import
 dormmeal/tools.py    load_catalog_csv, search_catalog, compute_totals (promo logic)
 dormmeal/validation.py  catalog quality / progress report
-data/catalog_v1.csv  50 starter products (3 chains)
+data/catalog_v1.csv  150 products (50 per chain), estimates, verified=false
 scripts/             load_catalog.py, validate_catalog.py
 docs/                DEVELOPMENT_LOG.md (report notes), DATA_COLLECTION_GUIDE.md
 tests/               unit + property tests (Hypothesis)
+notebooks/           week-10 lab: RAG agent + simulated focus group
 .github/workflows/   CI: runs pytest on every push
 ```
 
 ## IMPORTANT: catalog data
-`data/catalog_v1.csv` is a **starter set of estimates** (generic product types, approximate
+`data/catalog_v1.csv` (150 rows) is a **set of estimates** (generic product types, approximate
 prices and nutrition). Every row has `verified = false`. Replace values by real ones
 (store website, shelf label, nutrition label), set `verified = true`, and update `last_updated`.
 Run `python scripts/validate_catalog.py` to see progress and the verified ratio (report it in your final report).
