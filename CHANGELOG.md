@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.0] - 2026-11-12
+### Added
+- Verifier and CP-SAT optimizer (week 3), request parser and agent workflow (week 4), replanning and
+  persistence (week 5), Streamlit UI (week 6), benchmark (week 7), Docker / Streamlit Cloud (week 8),
+  robustness tests (week 9), week-10 lab notebook, evaluation (week 11), documentation (week 12),
+  final report draft and demo script (week 13).
+- 74 tests in total.
+### Known gaps
+- Catalog still 0% verified; LLM-only benchmark and notebook live run require a Gemini key.
+
 ## [0.3.0] - 2026-11-12
 ### Added
 - Catalog extended from 50 to 150 products (50 per chain, 21 categories, 25 promos).

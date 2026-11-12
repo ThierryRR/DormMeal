@@ -1,4 +1,4 @@
-# DormMeal development log (weeks 1-2)
+# DormMeal development log (weeks 1-13)
 
 Written to be reused in the final report. Dates: 2026-11-02. Author: Rosano Thierry.
 
@@ -47,11 +47,8 @@ Not in scope yet: Verifier, CP-SAT optimizer, LangGraph agent, Streamlit UI (wee
 - `vegetarian` tags are conservative; no `halal_friendly` tag is assigned because certification cannot be verified.
 - No nutrition-target checking yet (that is the Verifier, week 3).
 
-## 7. Remaining work
-1. Collect real data: reach ~150 products and a high verified share (see `docs/DATA_COLLECTION_GUIDE.md`).
-2. Push the repository to GitHub so CI runs (commands in README).
-3. Week 3: Verifier (budget, allergens, equipment, diet, nutrition, variety) and CP-SAT optimizer.
-4. Weeks 4-8: LangGraph agent, Streamlit UI, replanning, benchmark vs LLM-only, deployment.
+## 7. Remaining work (weeks 1-2 view)
+Superseded by sections 9-11 below.
 
 ## 8. Reproduce
 ```bash
@@ -60,3 +57,38 @@ pytest -q
 python scripts/validate_catalog.py
 python scripts/load_catalog.py
 ```
+
+## 9. Weeks 3-13 (2026-11-12)
+| Week | Delivered | Files |
+|---|---|---|
+| 3 | Verifier (10 rule types) and CP-SAT optimizer; then realistic meals (main product, 250-1,000 kcal), greedy warm start, budget lower bound | `verifier.py`, `optimizer.py` |
+| 4 | Request parser (Gemini JSON + rule fallback) and agent workflow with trace | `llm.py`, `parser.py`, `agent.py` |
+| 5 | Event parsing, replanning with locked meals and stability bonus; persistence of users, plans, likes, events | `events.py`, `agent.py`, `db.py` |
+| 6 | Streamlit interface (form/free text, week grid, shopping list, nutrition charts, checks, replanning, likes) | `app.py` |
+| 7 | Benchmark DormMeal vs LLM-only on 12 seeded scenarios, same Verifier | `benchmark/run_benchmark.py` |
+| 8 | Dockerfile, Streamlit Community Cloud guide, secrets handling | `Dockerfile`, `docs/DEPLOYMENT.md` |
+| 9 | Robustness: property test on the optimizer, malicious/malformed LLM output, long/empty input | `tests/test_robustness.py` |
+| 10 | Lab: RAG project agent (Hit@3 = 5/5) and simulated focus group notebook | `notebooks/` |
+| 11 | Evaluation: budget sensitivity, benchmark analysis | `docs/EVALUATION.md` |
+| 12 | Documentation: README, architecture, this log, changelog | `docs/` |
+| 13 | Final report draft and demo script; version 1.0.0 | `docs/FINAL_REPORT_DRAFT.md`, `docs/DEMO.md` |
+
+## 10. Problems met and how they were solved
+1. **First optimizer produced unrealistic meals** ("two plain rice cups" as breakfast). Added a "main product"
+   rule and a 250-1,000 kcal range per meal.
+2. **The search then became slow** (no plan within 12 s for 50,000 KRW, a plan existed at 30 s). Tried a
+   meal-combo pool model, a lexicographic two-stage objective and day-symmetry breaking: all worse. Kept the
+   product-level model and added a greedy warm start plus a quick budget lower bound. Default limit: 20 s.
+3. **Replanning reshuffled the whole week** after one sold-out item (14 of 14 meals changed). A stability
+   bonus brought it to about 4 changed meals for a skipped dinner.
+4. **Misleading error message** ("needs 1,000,000,000 KRW") when too few main dishes match a wheat allergy;
+   replaced by an explicit explanation.
+5. **SQLite connection used across Streamlit threads** crashed the UI; fixed with `check_same_thread=False`.
+6. **Gemini key not accepted from the cloud workspace** during development: the LLM-only benchmark and the
+   notebook live run must be executed with the key locally / in Colab.
+
+## 11. Status and what is still needed for the final report
+- 74 tests pass (`pytest -q`).
+- Catalog: 150 products, **0% verified**: collect real labels (highest-impact task left).
+- Run `python benchmark/run_benchmark.py` with `GEMINI_API_KEY` to fill the LLM-only column.
+- Run the week-10 notebook live and test the plan with real students (questions in the final report draft).
