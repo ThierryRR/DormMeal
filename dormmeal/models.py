@@ -74,6 +74,13 @@ class Constraints(BaseModel):
     max_repeats_per_product: int = Field(default=3, ge=1)
     disliked_product_ids: list[str] = []
     liked_product_ids: list[str] = []
+    skipped_meals: list[tuple[int, MealSlot]] = []   # (day, slot) the user will not eat (replanning)
+
+
+def active_slots(meals_per_day: int) -> list[MealSlot]:
+    """Slots planned for a given number of meals per day (1 -> lunch, 2 -> lunch + dinner, 3 -> all)."""
+    return {1: [MealSlot.LUNCH], 2: [MealSlot.LUNCH, MealSlot.DINNER],
+            3: [MealSlot.BREAKFAST, MealSlot.LUNCH, MealSlot.DINNER]}[meals_per_day]
 
 
 class PlanItem(BaseModel):
@@ -103,7 +110,8 @@ class Event(BaseModel):
 
 
 class Violation(BaseModel):
-    rule: Literal["budget", "allergen", "equipment", "diet", "nutrition", "variety", "unknown_product"]
+    rule: Literal["budget", "allergen", "equipment", "diet", "nutrition", "variety", "unknown_product",
+                  "store", "preference", "structure"]
     detail: str
 
 
