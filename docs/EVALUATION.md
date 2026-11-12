@@ -1,5 +1,7 @@
 # Evaluation (weeks 7 and 11)
 
+*Computed on the 248-product catalog of version 1.1.0 (98 sourced + 150 estimates); not re-run on the 378-product catalog of version 1.2.0.*
+
 All numbers below come from scripts in `benchmark/` run on 2026-11-12 with `data/catalog.csv`: 98 sourced
 products (research workbook) + 150 estimated products. Results that mix both kinds of data show how the
 system behaves; only the "sourced products only" row relies on sourced data alone.

@@ -117,23 +117,23 @@ kettle must have preparation instructions. Default nutrition targets per day: 1,
 (max_repeats_per_product). Vegetarian tags are conservative and no product is tagged halal_friendly, because
 halal certification could not be verified.""",
 
-"catalog": """Catalog status (data/catalog.csv, 2026-11-12). The catalog has 248 products in four chains
-(CU, GS25, 7-Eleven, Emart24). 98 products are sourced: imported from the research workbook with price, kcal,
-protein, carbs, fat and sodium all given (CU 46, 7-Eleven 21, GS25 17, Emart24 14). They are mostly drinks (41),
-snacks (13), instant noodles (11), ice cream (9) and milk (8); only 12 are meals (5 lunch boxes, 4 burgers and
-sandwiches, 2 kimbap, 1 triangle kimbap) plus 4 cooked-rice cups. The other 150 products are estimates of typical
-values. The saltiest sourced items are instant noodles (up to 1,950 mg sodium). Columns include name_ko (Korean
-label) and allergens_known.""",
+"catalog": """Catalog status (data/catalog.csv, 2026-11-12). The catalog has 378 products in four chains
+(CU, GS25, 7-Eleven, Emart24), in three tiers. Tier 1: 145 sourced products (98 rows from the research workbook,
+35 more store rows priced with the official KCA price survey, 12 rows with KCA prices and Open Food Facts
+nutrition). Tier 2: 83 real products with an official KCA price but estimated nutrition, such as Hetbahn rice, cup
+rice bowls, porridges, tuna cans, tofu and milk. Tier 3: 150 generic estimated products. Sourced products are
+mostly drinks (48), snacks (27), instant noodles (23) and ice cream (20); only 12 are meals. The saltiest sourced
+items are instant noodles (up to 1,950 mg sodium). Columns include name_ko (Korean label) and allergens_known.""",
 
-"data_quality": """Data quality and verification. 98 of the 248 catalog products are verified: price and
-nutrition come from an identified source for that exact product (MFDS-matched Meokfit pages, manufacturer or
-retailer pages), with the URL and a confidence level (B or C) in the source column. Prices are catalog reference
-prices to confirm in store. The other 150 products are estimates (verified = false). Allergens are missing for all
-sourced products: allergens_known = false, so they are never proposed to a user who declares an allergy. The
-import keeps a workbook row only when price, kcal, protein, carbs, fat and sodium are given: 43 rows had no price
-and 9 had no carbs or fat, and nothing was estimated. The validation script reports duplicated ids, kcal that does
-not match macros (4/4/9 rule), sodium above 3,000 mg, unusual prices, missing preparation instructions, and
-verified rows without a source. Sourced protein foods (eggs, chicken breast, tofu) are still missing.""",
+"data_quality": """Data quality and verification. 145 of the 378 catalog products are verified: price and
+nutrition come from an identified source for that exact product (MFDS-matched pages, manufacturer pages, the
+official KCA price survey of 2026-11-06 on price.go.kr, Open Food Facts), with the URL and a confidence level
+(B or C) in the source column. The other 233 products have estimated nutrition (verified = false); 83 of them
+have an official KCA price. Allergens are missing for all sourced products: allergens_known = false, so they are
+never proposed to a user who declares an allergy. The import keeps a workbook row only when price, kcal, protein,
+carbs, fat and sodium are given: 43 rows had no price and 9 had no carbs or fat. The validation script reports
+duplicated ids, kcal that does not match macros (4/4/9 rule), sodium above 3,000 mg, unusual prices, missing
+preparation instructions, and verified rows without a source. Meokfit and the MFDS database were unreachable.""",
 
 "replanning": """Replanning events. What happens when something changes during the week, for example a
 product is sold out, a meal is skipped or the budget changes: the user reports the event in free text and the

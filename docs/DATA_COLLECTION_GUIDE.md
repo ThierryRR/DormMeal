@@ -2,8 +2,8 @@
 
 Goal: a catalog where most rows are `verified = true`.
 
-Status (2026-11-12): 98 sourced products imported from the research workbook with `scripts/import_excel.py`
-(rows without a price or without carbs/fat are left out, nothing is estimated), plus 150 estimates.
+Status (2026-11-12): 378 products = 145 sourced (workbook + official KCA prices + a few Open Food Facts records),
+83 real products with an official KCA price and estimated nutrition, 150 generic estimates. Built by `scripts/import_excel.py`.
 Priority gaps: **allergen lines** (missing for all sourced rows) and **protein foods** (eggs, chicken breast, tofu,
 salads, more dosirak), which are absent from the sourced data.
 

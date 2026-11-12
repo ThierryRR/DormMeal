@@ -108,3 +108,26 @@ python scripts/load_catalog.py
 - Tried to extend with more sources cited in the workbook: Meokfit was offline (HTTP 503 "DEPLOYMENT_PAUSED"),
   MFDS K-FIND refused connections from the cloud workspace, price.go.kr gives prices only (no nutrition). The
   official MFDS and KCA Open APIs on data.go.kr need a free personal API key.
+
+## 13. More products from every reachable source (2026-11-12, version 1.2.0)
+Goal: as many real products as possible. What was tried and what it gave:
+| Source | Result |
+|---|---|
+| Meokfit (main source of the workbook) | offline all day (HTTP 503 "DEPLOYMENT_PAUSED"): nothing |
+| Wayback Machine copy of Meokfit | not reachable from the workspace: nothing |
+| MFDS K-FIND nutrition database | connection refused from the workspace: nothing |
+| **KCA price survey (price.go.kr)** | **460 official convenience-store prices** (201 products, survey of 2026-11-06), saved in `data/sources/kca_convenience_prices_2026-11-06.csv` |
+| **Open Food Facts** (Korea) | heavily rate-limited: 1,000 of 3,481 products downloaded, 4 reliable matches |
+
+Use of these data (`scripts/import_excel.py`):
+1. +35 sourced rows: products whose nutrition is in the workbook, priced by KCA in chains the workbook did not
+   cover (same product, same nutrition; includes Ansungtangmyun, which had no price in the workbook).
+2. +12 sourced rows (confidence C): KCA price + Open Food Facts nutrition (Pocari Sweat, Neoguri, Maeil
+   lactose-free milk, Binggrae protein drink; the last one needs a label check, see the source note).
+3. +83 rows "price-only": real products with an official KCA price (Hetbahn rice, cup rice bowls, porridges,
+   tuna cans, tofu, milk, protein and sports drinks...) whose nutrition is an estimate (`verified = false`).
+   They close the main gap of the sourced data (meals and protein foods) with real prices.
+Catalog: 378 products = 145 sourced + 83 price-only + 150 generic estimates.
+Also: at most one snack or ice cream per day in the optimizer (it was using promo candy as cheap calories).
+The benchmark and sensitivity tables in `docs/EVALUATION.md` were computed on the 248-product catalog (v1.1.0)
+and were not re-run.

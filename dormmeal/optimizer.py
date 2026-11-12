@@ -23,6 +23,7 @@ MAX_UNITS_PER_ITEM = 2
 MAX_ITEMS_PER_MEAL = 3
 MIN_MEAL_KCAL = 250
 MAX_MEAL_KCAL = 1000
+TREAT_CATEGORIES = {"snack", "ice_cream"}
 # a meal contains at least one "main" product (plain rice, drinks, fruit or snacks alone are not a meal)
 MAIN_CATEGORIES = {"triangle_kimbap", "kimbap_roll", "bento", "rice_bowl", "instant_noodle", "sandwich",
                    "porridge", "tteokbokki", "bread", "breakfast", "soup", "salad", "instant_rice"}
@@ -121,6 +122,16 @@ def optimize(catalog: Iterable[Product], c: Constraints, locked: Optional[list[M
         model.Add(meal_kcal >= MIN_MEAL_KCAL)
         model.Add(meal_kcal <= MAX_MEAL_KCAL)
         model.Add(sum(y[k, pid] for pid in pids if by_id[pid].category in MAIN_CATEGORIES) >= 1)
+
+    # at most one snack / ice-cream product per day, so sweets are not used as cheap calories
+    treats = [pid for pid in pids if by_id[pid].category in TREAT_CATEGORIES]
+    for day in range(1, 8):
+        day_meals = [k for k in meals if k[0] == day]
+        if day_meals and treats:
+            model.Add(sum(y[k, pid] for k in day_meals for pid in treats) <= 1)
+            for k in day_meals:
+                for pid in treats:
+                    model.Add(x[k, pid] <= 1)
 
     locked_units = {pid: 0 for pid in involved}
     locked_meals_count = {pid: 0 for pid in involved}

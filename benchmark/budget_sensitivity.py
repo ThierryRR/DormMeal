@@ -26,7 +26,7 @@ BUDGETS = [50000, 60000, 70000, 80000, 90000, 100000]
 
 def main(time_limit=8):
     lines = ["# Budget sensitivity (3 meals/day, 7 days)", "",
-             f"Optimizer time limit {time_limit} s, catalog.csv (98 sourced + 150 estimated products). Cell = days that miss "
+             f"Optimizer time limit {time_limit} s, catalog.csv. Cell = days that miss "
              "a nutrition target (0 = fully valid plan), `-` = no plan.", "",
              "| Profile | " + " | ".join(f"{b // 1000}k" for b in BUDGETS) + " |",
              "|---|" + "---|" * len(BUDGETS)]

@@ -19,9 +19,10 @@ into validated structured data; a CP-SAT optimizer builds the plan; a Verifier c
 ## 3. System
 See `docs/ARCHITECTURE.md`. Workflow: parse -> search -> optimize -> verify -> explain; replanning locks
 the meals already eaten and re-optimizes the rest with a stability bonus. Interface: Streamlit.
-Data: 248 products in 4 chains (CU, GS25, 7-Eleven, Emart24). **98 are sourced** from a research workbook
-(MFDS-matched nutrition, manufacturer/retailer pages, Meokfit reference prices; URL and confidence level per row);
-**150 are estimates**. Users can restrict planning to sourced products. SQLite stores users, plans, likes, events.
+Data: 378 products in 4 chains (CU, GS25, 7-Eleven, Emart24). **145 are sourced** (research workbook with
+MFDS-matched nutrition and manufacturer pages; official KCA price survey of 2026-11-06; a few Open Food Facts
+records; URL and confidence level per row). **83 are real products with an official price but estimated
+nutrition**, and **150 are generic estimates**. Users can restrict planning to sourced products. SQLite stores users, plans, likes, events.
 
 ## 4. Evaluation
 ### 4.1 Tests
@@ -52,7 +53,7 @@ one unrealistic moment, quotes.
 4. Is giving allergies and equipment acceptable? What would make them stop using it?
 
 ## 5. Limitations
-- **Data:** 98 of 248 products are sourced (39.5%); 150 are still estimates. Sourced rows have **no allergen data**
+- **Data:** 145 of 378 products are sourced (38%); 233 have estimated nutrition (83 of them with an official price). Sourced rows have **no allergen data**
   (excluded for allergic users) and **no plain protein foods** (eggs, chicken breast, tofu), so sourced-only plans
   often miss the protein target. Prices are catalog reference prices, not shelf prices observed in one store.
 - **Optimality:** the search is time-limited (20 s); plans are good, not always optimal.
