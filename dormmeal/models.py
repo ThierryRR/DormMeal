@@ -75,6 +75,7 @@ class Constraints(BaseModel):
     disliked_product_ids: list[str] = []
     liked_product_ids: list[str] = []
     skipped_meals: list[tuple[int, MealSlot]] = []   # (day, slot) the user will not eat (replanning)
+    unavailable_product_ids: list[str] = []          # sold out this week (replanning), not a dislike
 
 
 def active_slots(meals_per_day: int) -> list[MealSlot]:
@@ -106,6 +107,8 @@ class Event(BaseModel):
     product_id: Optional[str] = None
     store: Optional[Store] = None
     new_budget_krw: Optional[int] = None
+    equipment: Optional[Equipment] = None      # for equipment_change
+    available: Optional[bool] = None           # equipment_change: True = gained, False = lost/broken
     raw_text: str
 
 

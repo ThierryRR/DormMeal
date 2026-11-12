@@ -101,7 +101,7 @@ def search_catalog(
 
 def search_for_constraints(catalog: Iterable[Product], c: Constraints) -> list[Product]:
     return search_catalog(catalog, stores=c.stores, equipment=c.equipment, allergies=c.allergies,
-                          diet=c.diet, exclude_ids=c.disliked_product_ids)
+                          diet=c.diet, exclude_ids=c.disliked_product_ids + c.unavailable_product_ids)
 
 
 def compute_totals(plan: MealPlan, catalog: Iterable[Product]) -> Totals:
