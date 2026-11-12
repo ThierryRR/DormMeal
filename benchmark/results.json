@@ -1,0 +1,364 @@
+{
+  "summary": {
+    "dormmeal": {
+      "n": 12,
+      "valid_pct": 8.3,
+      "hard_constraints_ok_pct": 83.3,
+      "parsed_pct": 83.3,
+      "avg_seconds": 8.4,
+      "violations_total": {
+        "nutrition": 86,
+        "no_plan": 2
+      }
+    },
+    "llm_only": null,
+    "llm_model": null,
+    "time_limit_s": 10.0,
+    "catalog": "catalog_v1.csv (150 estimated products)"
+  },
+  "rows": [
+    {
+      "scenario": 1,
+      "constraints": {
+        "weekly_budget_krw": 45000,
+        "diet": "none",
+        "allergies": [],
+        "equipment": [
+          "kettle"
+        ],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 2
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 11
+        },
+        "cost": 45000,
+        "hard_ok": true,
+        "seconds": 10.0,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 2,
+      "constraints": {
+        "weekly_budget_krw": 45000,
+        "diet": "vegetarian",
+        "allergies": [],
+        "equipment": [
+          "microwave",
+          "kettle",
+          "fridge"
+        ],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 13
+        },
+        "cost": 45000,
+        "hard_ok": true,
+        "seconds": 10.1,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 3,
+      "constraints": {
+        "weekly_budget_krw": 45000,
+        "diet": "none",
+        "allergies": [],
+        "equipment": [
+          "microwave"
+        ],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 2
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 4
+        },
+        "cost": 44300,
+        "hard_ok": true,
+        "seconds": 10.1,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 4,
+      "constraints": {
+        "weekly_budget_krw": 90000,
+        "diet": "none",
+        "allergies": [
+          "fish",
+          "egg"
+        ],
+        "equipment": [
+          "microwave"
+        ],
+        "stores": [
+          "CU",
+          "Emart24"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": true,
+        "parsed": true,
+        "violations": {},
+        "cost": 72600,
+        "hard_ok": true,
+        "seconds": 10.0,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 5,
+      "constraints": {
+        "weekly_budget_krw": 65000,
+        "diet": "none",
+        "allergies": [],
+        "equipment": [
+          "microwave"
+        ],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 4
+        },
+        "cost": 65000,
+        "hard_ok": true,
+        "seconds": 10.1,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 6,
+      "constraints": {
+        "weekly_budget_krw": 45000,
+        "diet": "none",
+        "allergies": [
+          "pork"
+        ],
+        "equipment": [],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 14
+        },
+        "cost": 45000,
+        "hard_ok": true,
+        "seconds": 10.0,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 7,
+      "constraints": {
+        "weekly_budget_krw": 75000,
+        "diet": "none",
+        "allergies": [
+          "soy",
+          "fish"
+        ],
+        "equipment": [],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": false,
+        "violations": {
+          "no_plan": 1
+        },
+        "cost": null,
+        "hard_ok": false,
+        "seconds": 0.0,
+        "status": "infeasible"
+      }
+    },
+    {
+      "scenario": 8,
+      "constraints": {
+        "weekly_budget_krw": 45000,
+        "diet": "none",
+        "allergies": [
+          "soy"
+        ],
+        "equipment": [
+          "microwave"
+        ],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 2
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 4
+        },
+        "cost": 45000,
+        "hard_ok": true,
+        "seconds": 10.1,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 9,
+      "constraints": {
+        "weekly_budget_krw": 75000,
+        "diet": "none",
+        "allergies": [
+          "wheat"
+        ],
+        "equipment": [
+          "microwave",
+          "fridge"
+        ],
+        "stores": [
+          "GS25"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": false,
+        "violations": {
+          "no_plan": 1
+        },
+        "cost": null,
+        "hard_ok": false,
+        "seconds": 0.0,
+        "status": "infeasible"
+      }
+    },
+    {
+      "scenario": 10,
+      "constraints": {
+        "weekly_budget_krw": 55000,
+        "diet": "none",
+        "allergies": [],
+        "equipment": [
+          "kettle"
+        ],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 13
+        },
+        "cost": 54300,
+        "hard_ok": true,
+        "seconds": 10.1,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 11,
+      "constraints": {
+        "weekly_budget_krw": 55000,
+        "diet": "none",
+        "allergies": [
+          "nuts"
+        ],
+        "equipment": [
+          "microwave",
+          "fridge"
+        ],
+        "stores": [
+          "GS25"
+        ],
+        "meals_per_day": 3
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 14
+        },
+        "cost": 55000,
+        "hard_ok": true,
+        "seconds": 10.1,
+        "status": "feasible"
+      }
+    },
+    {
+      "scenario": 12,
+      "constraints": {
+        "weekly_budget_krw": 45000,
+        "diet": "none",
+        "allergies": [
+          "beef"
+        ],
+        "equipment": [],
+        "stores": [
+          "CU",
+          "GS25",
+          "Emart24"
+        ],
+        "meals_per_day": 2
+      },
+      "dormmeal": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "nutrition": 9
+        },
+        "cost": 45000,
+        "hard_ok": true,
+        "seconds": 10.0,
+        "status": "feasible"
+      }
+    }
+  ]
+}

@@ -93,6 +93,12 @@ def optimize(catalog: Iterable[Product], c: Constraints, locked: Optional[list[M
     cands = search_for_constraints(catalog, c)
     if not any(p.category in MAIN_CATEGORIES for p in cands) and meals:
         return OptimizeResult("infeasible", message="No product matches your allergies, diet, equipment and stores.")
+    n_mains = sum(1 for p in cands if p.category in MAIN_CATEGORIES)
+    if n_mains * c.max_repeats_per_product < len(meals):
+        return OptimizeResult("infeasible", message=(
+            f"Only {n_mains} main dishes match your allergies, diet, equipment and stores; with at most "
+            f"{c.max_repeats_per_product} meals per product they cover {n_mains * c.max_repeats_per_product} "
+            f"of your {len(meals)} meals. Allow more repeats, fewer meals per day, or more equipment/stores."))
     lb = budget_lower_bound(cands, len(meals), c.max_repeats_per_product)
     if enforce_budget and lb > c.weekly_budget_krw:
         return OptimizeResult("infeasible", message=(
