@@ -55,7 +55,8 @@ def verify(plan: MealPlan, catalog: Iterable[Product], c: Constraints) -> Verifi
     # per-product hard constraints
     banned = {a.lower() for a in c.allergies}
     equipment = set(c.equipment)
-    used = {i.product_id for m in plan.meals for i in m.items}
+    # locked meals were already eaten (replanning): they are not re-checked for products
+    used = {i.product_id for m in plan.meals if not m.locked for i in m.items}
     for pid in sorted(used):
         p = by_id[pid]
         if banned & set(p.allergens):
