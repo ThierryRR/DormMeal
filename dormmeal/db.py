@@ -53,8 +53,9 @@ CREATE TABLE IF NOT EXISTS event_logs (
 """
 
 
-def init_db(path: str | Path = ":memory:") -> sqlite3.Connection:
-    conn = sqlite3.connect(str(path))
+def init_db(path: str | Path = ":memory:", check_same_thread: bool = True) -> sqlite3.Connection:
+    """`check_same_thread=False` is needed by Streamlit, which runs each rerun in another thread."""
+    conn = sqlite3.connect(str(path), check_same_thread=check_same_thread)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
     return conn
