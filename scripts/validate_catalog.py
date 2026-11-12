@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from dormmeal.tools import load_catalog_csv  # noqa: E402
 from dormmeal.validation import catalog_report  # noqa: E402
 
-path = sys.argv[1] if len(sys.argv) > 1 else "data/catalog_v1.csv"
+path = sys.argv[1] if len(sys.argv) > 1 else "data/catalog.csv"
 r = catalog_report(load_catalog_csv(path))
 print(f"Products : {r['total']} / {r['target']} target ({r['progress_pct']}%)")
 print(f"Verified : {r['verified']} ({r['verified_pct']}%)")

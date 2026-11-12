@@ -1,6 +1,11 @@
 # Catalog data collection guide
 
-Goal: move from the 50 starter estimates to ~150 products where most rows are `verified = true`.
+Goal: a catalog where most rows are `verified = true`.
+
+Status (2026-11-12): 98 sourced products imported from the research workbook with `scripts/import_excel.py`
+(rows without a price or without carbs/fat are left out, nothing is estimated), plus 150 estimates.
+Priority gaps: **allergen lines** (missing for all sourced rows) and **protein foods** (eggs, chicken breast, tofu,
+salads, more dosirak), which are absent from the sourced data.
 
 ## For each product, record
 | Column | How to get it |
@@ -17,12 +22,14 @@ Goal: move from the 50 starter estimates to ~150 products where most rows are `v
 | `prep_instructions` | Copy the heating instruction (e.g. "Microwave 2 min"). Mandatory if `requires` has microwave or kettle |
 | `description` | Packaging colour, shelf section: helps find it in an English-only interface |
 | `last_updated` | Date of observation (YYYY-MM-DD) |
-| `verified` | `true` only when price and nutrition come from the real label or tag |
-| `source` | e.g. `label photo 2026-11-05, CU <store name>`. Required when `verified = true` |
+| `verified` | `true` only when price and nutrition come from an identified source for this exact product (label/tag photo, MFDS record, manufacturer page, retailer catalog). Never for estimates |
+| `source` | URL or `label photo 2026-11-05, CU <store name>`, plus confidence level. Required when `verified = true` |
+| `name_ko` | Korean name exactly as printed (lets an English-speaking user match the package) |
+| `allergens_known` | `false` when the source gives no allergen line: the product is then excluded for any allergic user |
 
 ## Workflow
 1. Take photos of the price tag and nutrition label in store (or note them), 20-30 products per visit.
-2. Add rows to `data/catalog_v1.csv` (use `data/catalog_template.csv` for the header).
+2. Add rows to the workbook (preferred, then run `python scripts/import_excel.py`) or directly to `data/catalog.csv`.
 3. Run `python scripts/validate_catalog.py` to see progress and detect typos (kcal vs macros, missing prep, duplicates).
 4. Run `pytest -q`, then commit (`data: add N verified products from <chain>`).
 

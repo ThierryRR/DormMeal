@@ -7,14 +7,14 @@
       "parsed_pct": 83.3,
       "avg_seconds": 8.4,
       "violations_total": {
-        "nutrition": 86,
+        "nutrition": 84,
         "no_plan": 2
       }
     },
     "llm_only": null,
     "llm_model": null,
     "time_limit_s": 10.0,
-    "catalog": "catalog_v1.csv (150 estimated products)"
+    "catalog": "catalog.csv (98 sourced + 150 estimated products)"
   },
   "rows": [
     {
@@ -37,11 +37,11 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 11
+          "nutrition": 9
         },
         "cost": 45000,
         "hard_ok": true,
-        "seconds": 10.0,
+        "seconds": 10.1,
         "status": "feasible"
       }
     },
@@ -67,9 +67,9 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 13
+          "nutrition": 14
         },
-        "cost": 45000,
+        "cost": 44900,
         "hard_ok": true,
         "seconds": 10.1,
         "status": "feasible"
@@ -95,9 +95,9 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 4
+          "nutrition": 2
         },
-        "cost": 44300,
+        "cost": 44700,
         "hard_ok": true,
         "seconds": 10.1,
         "status": "feasible"
@@ -125,7 +125,7 @@
         "valid": true,
         "parsed": true,
         "violations": {},
-        "cost": 72600,
+        "cost": 74000,
         "hard_ok": true,
         "seconds": 10.0,
         "status": "feasible"
@@ -153,7 +153,7 @@
         "violations": {
           "nutrition": 4
         },
-        "cost": 65000,
+        "cost": 64600,
         "hard_ok": true,
         "seconds": 10.1,
         "status": "feasible"
@@ -181,9 +181,9 @@
         "violations": {
           "nutrition": 14
         },
-        "cost": 45000,
+        "cost": 44800,
         "hard_ok": true,
-        "seconds": 10.0,
+        "seconds": 10.1,
         "status": "feasible"
       }
     },
@@ -240,9 +240,9 @@
         "violations": {
           "nutrition": 4
         },
-        "cost": 45000,
+        "cost": 44700,
         "hard_ok": true,
-        "seconds": 10.1,
+        "seconds": 10.0,
         "status": "feasible"
       }
     },
@@ -297,7 +297,7 @@
         "violations": {
           "nutrition": 13
         },
-        "cost": 54300,
+        "cost": 54700,
         "hard_ok": true,
         "seconds": 10.1,
         "status": "feasible"
@@ -324,7 +324,7 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 14
+          "nutrition": 15
         },
         "cost": 55000,
         "hard_ok": true,
@@ -354,7 +354,7 @@
         "violations": {
           "nutrition": 9
         },
-        "cost": 45000,
+        "cost": 44700,
         "hard_ok": true,
         "seconds": 10.0,
         "status": "feasible"

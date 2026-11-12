@@ -81,12 +81,12 @@ EXAMPLE_REQUEST = ("I take home 3 units of a 2+1 instant rice priced 1,500 KRW. 
 
 md(r"""
 ## 1D: Knowledge base
-These are seven documents taken from the DormMeal repository (weeks 1-2): `README.md`, `docs/DEVELOPMENT_LOG.md`, `docs/DATA_COLLECTION_GUIDE.md`, `dormmeal/models.py`, `dormmeal/tools.py` and `data/catalog_v1.csv`. The text is rewritten as prose so it can be retrieved. The `catalog` document summarises the 150-row CSV.
+These are seven documents taken from the DormMeal repository: `README.md`, `docs/DEVELOPMENT_LOG.md`, `docs/DATA_COLLECTION_GUIDE.md`, `dormmeal/models.py`, `dormmeal/tools.py` and `data/catalog_v1.csv`. The text is rewritten as prose so it can be retrieved. The `catalog` document summarises `data/catalog.csv`.
 """)
 code(r'''
 KB_DOCS = {
 "proposal": """DormMeal project proposal. DormMeal is a meal-planning agent for international students who live
-in Korean university dorms and eat mostly from convenience stores (CU, GS25 and Emart24). The user gives a
+in Korean university dorms and eat mostly from convenience stores (CU, GS25, Emart24 and 7-Eleven). The user gives a
 weekly budget in KRW, a diet (none, vegetarian or halal_friendly), allergies, the kitchen equipment they have
 (microwave, kettle, fridge), the stores they can reach and how many meals per day they eat (1 to 3). The agent
 returns a 7-day meal plan made only of catalog products, with the total cost and the daily nutrition. The core
@@ -117,25 +117,23 @@ kettle must have preparation instructions. Default nutrition targets per day: 1,
 (max_repeats_per_product). Vegetarian tags are conservative and no product is tagged halal_friendly, because
 halal certification could not be verified.""",
 
-"catalog": """Catalog status (catalog_v1.csv, 2026-11-12). The catalog has 150 products: 50 CU, 50 GS25 and
-50 Emart24, in 21 categories such as triangle_kimbap (19 products, 1,200-1,900 KRW), bento (11, 4,300-5,500 KRW),
-instant_rice (8, 1,200-3,200 KRW), instant_noodle (10, 1,000-1,800 KRW), protein (11, 1,500-4,500 KRW, e.g.
-chicken breast packs and tofu), egg, dairy, drink, salad, sandwich, porridge, fruit and snack. 25 products are on
-promotion (16 x 2+1, 9 x 1+1). 80 products are tagged vegetarian. 40 products need a microwave, 12 need a kettle,
-43 need a fridge, and 55 need no equipment. The saltiest items are cup noodles (up to 1,900 mg sodium per cup).
-Columns: product_id, name_en, store, category, price_krw, promo_type, kcal, protein_g, carbs_g, fat_g, sodium_mg,
-allergens, diet_tags, requires, prep_instructions, description, last_updated, verified, source.""",
+"catalog": """Catalog status (data/catalog.csv, 2026-11-12). The catalog has 248 products in four chains
+(CU, GS25, 7-Eleven, Emart24). 98 products are sourced: imported from the research workbook with price, kcal,
+protein, carbs, fat and sodium all given (CU 46, 7-Eleven 21, GS25 17, Emart24 14). They are mostly drinks (41),
+snacks (13), instant noodles (11), ice cream (9) and milk (8); only 12 are meals (5 lunch boxes, 4 burgers and
+sandwiches, 2 kimbap, 1 triangle kimbap) plus 4 cooked-rice cups. The other 150 products are estimates of typical
+values. The saltiest sourced items are instant noodles (up to 1,950 mg sodium). Columns include name_ko (Korean
+label) and allergens_known.""",
 
-"data_quality": """Data quality and verification. Every catalog row has verified = false: the 150 values are
-estimates of typical label values, not readings of real labels. No public price or nutrition API exists for the
-chains, and web sources were scattered and user-generated. A row may be set to verified = true only when price
-and nutrition come from the real label or shelf tag, and then the source column must say where (for example a
-label photo with date and store). The validation script (scripts/validate_catalog.py) reports progress toward
-the 150-product target, the verified share, and anomalies: duplicated ids, kcal that does not match macros by
-the 4/4/9 rule, sodium above 3,000 mg, prices outside 300-20,000 KRW, missing preparation instructions, and
-verified rows without a source. Evidence for the gap: a third-party site lists a CU tuna-mayo triangle kimbap at
-about 189 kcal, while the starter estimate is 230 kcal. A Korea Consumer Agency test found 760-1,393 mg of sodium
-per convenience-store kimbap roll. Prices vary by store and month; the catalog is a dated snapshot.""",
+"data_quality": """Data quality and verification. 98 of the 248 catalog products are verified: price and
+nutrition come from an identified source for that exact product (MFDS-matched Meokfit pages, manufacturer or
+retailer pages), with the URL and a confidence level (B or C) in the source column. Prices are catalog reference
+prices to confirm in store. The other 150 products are estimates (verified = false). Allergens are missing for all
+sourced products: allergens_known = false, so they are never proposed to a user who declares an allergy. The
+import keeps a workbook row only when price, kcal, protein, carbs, fat and sodium are given: 43 rows had no price
+and 9 had no carbs or fat, and nothing was estimated. The validation script reports duplicated ids, kcal that does
+not match macros (4/4/9 rule), sodium above 3,000 mg, unusual prices, missing preparation instructions, and
+verified rows without a source. Sourced protein foods (eggs, chicken breast, tofu) are still missing.""",
 
 "replanning": """Replanning events. What happens when something changes during the week, for example a
 product is sold out, a meal is skipped or the budget changes: the user reports the event in free text and the

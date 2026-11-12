@@ -67,3 +67,49 @@ def test_validation_report_detects_problems(catalog):
     r = catalog_report([bad, dup, dup])
     text = " ".join(r["issues"])
     assert "duplicated id" in text and "does not match macros" in text and "no source" in text
+
+
+# ---- sourced catalog imported from the research workbook ----
+SOURCED = Path(__file__).resolve().parent.parent / "data" / "catalog_sourced.csv"
+FULL = Path(__file__).resolve().parent.parent / "data" / "catalog.csv"
+
+
+def test_sourced_catalog_is_traceable_and_clean():
+    from dormmeal.validation import catalog_report
+    rows = load_catalog_csv(SOURCED)
+    assert len(rows) >= 90
+    assert all(p.verified and "http" in p.source and p.name_ko for p in rows)
+    assert all(not p.allergens_known and not p.diet_tags for p in rows)   # unknown, never guessed
+    assert catalog_report(rows)["issues"] == []
+
+
+def test_full_catalog_combines_sourced_and_estimates():
+    rows = load_catalog_csv(FULL)
+    ids = [p.product_id for p in rows]
+    assert len(ids) == len(set(ids))
+    assert {p.store.value for p in rows} == {"CU", "GS25", "Emart24", "7-Eleven"}
+    assert any(p.verified for p in rows) and any(not p.verified for p in rows)
+
+
+def test_unknown_allergens_are_excluded_for_allergic_users():
+    from dormmeal.tools import search_catalog
+    rows = load_catalog_csv(FULL)
+    allergic = search_catalog(rows, equipment=["microwave", "kettle", "fridge"], allergies=["milk"])
+    assert all(p.allergens_known for p in allergic)
+    none = search_catalog(rows, equipment=["microwave", "kettle", "fridge"])
+    assert any(not p.allergens_known for p in none)
+
+
+def test_sourced_only_filter():
+    from dormmeal.models import Constraints
+    from dormmeal.tools import search_for_constraints
+    rows = load_catalog_csv(FULL)
+    c = Constraints(weekly_budget_krw=80000, equipment=["microwave", "kettle", "fridge"], sourced_only=True)
+    assert all(p.verified for p in search_for_constraints(rows, c))
+
+
+def test_full_catalog_sqlite_roundtrip():
+    rows = load_catalog_csv(FULL)
+    conn = init_db(":memory:")
+    assert import_catalog(conn, FULL) == len(rows)
+    assert fetch_catalog(conn) == sorted(rows, key=lambda p: p.product_id)

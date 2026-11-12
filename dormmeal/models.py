@@ -9,6 +9,7 @@ class Store(str, Enum):
     CU = "CU"
     GS25 = "GS25"
     EMART24 = "Emart24"
+    SEVEN_ELEVEN = "7-Eleven"
 
 
 class Equipment(str, Enum):
@@ -53,8 +54,10 @@ class Product(BaseModel):
     prep_instructions: Optional[str] = None
     description: str
     last_updated: str
-    verified: bool = False  # True once price and nutrition were checked against a real label
-    source: str = ""       # where the values come from (e.g. "label photo 2026-11-05, CU Gangnam")
+    verified: bool = False  # True when price and nutrition come from an identified source for this exact product
+    source: str = ""       # where the values come from (URL, label photo, ...)
+    name_ko: str = ""      # Korean name as printed on the package (helps to find it in the store)
+    allergens_known: bool = True  # False when the source gives no allergen information
 
 
 class NutritionTargets(BaseModel):
@@ -68,7 +71,7 @@ class Constraints(BaseModel):
     diet: Diet = Diet.NONE
     allergies: list[str] = []
     equipment: list[Equipment] = []
-    stores: list[Store] = [Store.CU, Store.GS25, Store.EMART24]
+    stores: list[Store] = [Store.CU, Store.GS25, Store.EMART24, Store.SEVEN_ELEVEN]
     meals_per_day: int = Field(default=3, ge=1, le=3)
     targets: NutritionTargets = NutritionTargets()
     max_repeats_per_product: int = Field(default=3, ge=1)
@@ -76,6 +79,7 @@ class Constraints(BaseModel):
     liked_product_ids: list[str] = []
     skipped_meals: list[tuple[int, MealSlot]] = []   # (day, slot) the user will not eat (replanning)
     unavailable_product_ids: list[str] = []          # sold out this week (replanning), not a dislike
+    sourced_only: bool = False                       # use only products with sourced (verified) data
 
 
 def active_slots(meals_per_day: int) -> list[MealSlot]:

@@ -14,7 +14,7 @@ from dormmeal.parser import ALLERGEN_WORDS
 from dormmeal.tools import load_catalog_csv
 
 ROOT = Path(__file__).resolve().parent
-CSV = ROOT / "data" / "catalog_v1.csv"
+CSV = ROOT / "data" / "catalog.csv"
 DB = ROOT / "dormmeal.db"
 DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
@@ -54,7 +54,11 @@ mode = st.sidebar.radio("How do you want to describe your week?", ["Form", "In m
 st.sidebar.caption("Free-text understanding: " + ("Gemini + rules" if llm.available() else "rules only (no API key)"))
 
 st.title("Plan my week")
-st.warning("Prices and nutrition in this demo catalog are **estimates**, not verified labels.", icon="⚠️")
+n_src = sum(p.verified for p in agent.catalog)
+st.info(f"Catalog: {n_src} products with sourced data (MFDS / manufacturer / Meokfit, reference prices) and "
+        f"{len(agent.catalog) - n_src} **estimated** products. Allergen information is missing for sourced products: "
+        "they are never proposed to users who declare an allergy.", icon="ℹ️")
+sourced_only = st.checkbox("Use only products with sourced data (fewer choices, less protein)", value=False)
 
 constraints, text = None, ""
 if mode == "Form":
@@ -67,7 +71,7 @@ if mode == "Form":
     stores = c3.multiselect("Stores I can reach", [s.value for s in Store], default=[s.value for s in Store])
     constraints = Constraints(weekly_budget_krw=int(budget), meals_per_day=meals, equipment=equipment, diet=diet,
                               allergies=allergies, stores=stores or [s.value for s in Store],
-                              liked_product_ids=liked, disliked_product_ids=disliked)
+                              liked_product_ids=liked, disliked_product_ids=disliked, sourced_only=sourced_only)
 else:
     text = st.text_area("Describe your situation", height=90,
                         placeholder="e.g. I have 60,000 won for the week, a microwave and a fridge, "
@@ -78,8 +82,9 @@ if st.button("Plan my week", type="primary"):
         if constraints is None:
             s = agent.plan(text)
             if s.constraints is not None:   # add stored preferences, then solve again
-                c = s.constraints.model_copy(update={"liked_product_ids": liked, "disliked_product_ids": disliked})
-                s = agent.plan(constraints=c) if (liked or disliked) else s
+                c = s.constraints.model_copy(update={"liked_product_ids": liked, "disliked_product_ids": disliked,
+                                                     "sourced_only": sourced_only})
+                s = agent.plan(constraints=c) if (liked or disliked or sourced_only) else s
                 s.request = text
         else:
             s = agent.plan(constraints=constraints)
@@ -114,9 +119,12 @@ def show_state(s):
         st.caption("🔒 = already eaten (kept when replanning)" if any(r["locked"] for r in rows) else "")
     with tab2:
         shop = pd.DataFrame(agent.shopping_list(s.plan))
+        shop["data"] = shop["product_id"].map(lambda p: "sourced" if agent.by_id[p].verified else "estimate")
+        st.caption(f"{(shop['data'] == 'sourced').sum()} of {len(shop)} products have sourced data.")
         for store, part in shop.groupby("store"):
             st.subheader(f"{store}: {part['cost_krw'].sum():,} KRW")
-            st.dataframe(part[["product", "units", "paid_units", "promo", "unit_price_krw", "cost_krw", "where", "prep"]],
+            st.dataframe(part[["product", "units", "paid_units", "promo", "unit_price_krw", "cost_krw", "where", "prep",
+                               "data"]],
                          hide_index=True, use_container_width=True)
     with tab3:
         t = c.targets
