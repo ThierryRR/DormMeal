@@ -14,8 +14,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Iterable, Optional
 
-from .models import Constraints, MealPlan, MealSlot, Product, PromoType, VerificationResult
+from .models import Constraints, Event, MealPlan, MealSlot, Product, VerificationResult
 from .optimizer import optimize
+from .events import apply_event, parse_event
 from .parser import parse_request
 from .tools import paid_units, search_for_constraints
 from .verifier import day_factor, verify
@@ -64,14 +65,14 @@ class DormMealAgent:
         s.constraints = constraints
         return self._solve(s, locked)
 
-    def _solve(self, s: AgentState, locked=None) -> AgentState:
+    def _solve(self, s: AgentState, locked=None, previous: Optional[MealPlan] = None) -> AgentState:
         c = s.constraints
         t0 = time.time()
         n = len(search_for_constraints(self.catalog, c))
         s.log("search", f"{n} compatible products", t0)
 
         t0 = time.time()
-        r = optimize(self.catalog, c, locked=locked, time_limit_s=self.time_limit_s)
+        r = optimize(self.catalog, c, locked=locked, time_limit_s=self.time_limit_s, previous=previous)
         s.log("optimize", f"status={r.status} nutrition_penalty={r.nutrition_penalty}", t0)
         if r.plan is None:
             s.status, s.message = "infeasible", r.message
@@ -89,6 +90,41 @@ class DormMealAgent:
         s.status = "planned"
         s.message = self.explain(s)
         return s
+
+    def replan(self, s: AgentState, event, today: int, now: MealSlot) -> AgentState:
+        """Apply an event during the week. Meals before (today, now) are locked (already eaten);
+        the remaining meals are re-optimised with the updated constraints."""
+        t0 = time.time()
+        if isinstance(event, str):
+            ev = parse_event(event, s.plan, self.catalog, today=today, use_llm=self.use_llm)
+        else:
+            ev = event
+        if ev is None:
+            out = AgentState(request=str(event), constraints=s.constraints, plan=s.plan,
+                             verification=s.verification, status=s.status, assumptions=s.assumptions)
+            out.message = ("I could not understand this change. Try e.g. 'GS25 tuna kimbap was sold out', "
+                           "'skip dinner on Friday', 'my budget is now 40,000 won', 'the microwave is broken'.")
+            return out
+        new_c, desc = apply_event(s.constraints, ev)
+        order = {sl.value: i for i, sl in enumerate(MealSlot)}
+        cut = (today, order[now.value])
+        locked = [m.model_copy(update={"locked": True}) for m in s.plan.meals
+                  if (m.day, order[m.slot.value]) < cut]
+        # a skipped meal in the past changes nothing
+        new_c.skipped_meals = [(d, sl) for d, sl in new_c.skipped_meals
+                               if (d, order[MealSlot(sl).value]) >= cut or (d, sl) in s.constraints.skipped_meals]
+        out = AgentState(request=ev.raw_text, constraints=new_c, assumptions=s.assumptions, used_llm=s.used_llm)
+        out.log("event", f"{ev.type}: {desc}", t0)
+        out = self._solve(out, locked=locked, previous=s.plan)
+        if out.plan is not None:
+            before = {(m.day, m.slot.value): sorted((i.product_id, i.quantity) for i in m.items) for m in s.plan.meals}
+            changed = sum(1 for m in out.plan.meals if not m.locked and
+                          before.get((m.day, m.slot.value)) != sorted((i.product_id, i.quantity) for i in m.items))
+            out.message = f"{desc} {len(locked)} meals already eaten were kept; {changed} upcoming meals changed.\n" \
+                          + out.message
+        else:
+            out.message = f"{desc} " + out.message
+        return out
 
     # ---------------- presentation (deterministic, numbers come from code) ----------------
     def shopping_list(self, plan: MealPlan) -> list[dict]:

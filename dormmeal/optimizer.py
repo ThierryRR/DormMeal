@@ -28,6 +28,7 @@ MAIN_CATEGORIES = {"triangle_kimbap", "kimbap_roll", "bento", "rice_bowl", "inst
                    "porridge", "tteokbokki", "bread", "breakfast", "soup", "salad", "instant_rice"}
 W_NUTRITION = 50      # KRW-equivalent penalty per kcal / 0.1 g protein / mg sodium outside targets
 LIKE_BONUS = 300      # KRW-equivalent bonus each time a liked product is used
+STABILITY_BONUS = 5000  # KRW-equivalent bonus per product kept in the same meal when replanning
 MARGIN_KCAL, MARGIN_PROTEIN_DG, MARGIN_SODIUM = 40, 30, 100   # safety margins (kcal, 0.1 g, mg)
 
 
@@ -81,7 +82,9 @@ def _add_greedy_hint(model, x, y, meals, cands, c: Constraints) -> None:
 
 
 def optimize(catalog: Iterable[Product], c: Constraints, locked: Optional[list[Meal]] = None,
-             time_limit_s: float = 20.0, enforce_budget: bool = True) -> OptimizeResult:
+             time_limit_s: float = 20.0, enforce_budget: bool = True,
+             previous: Optional[MealPlan] = None) -> OptimizeResult:
+    """`previous`: the plan before a replanning event; keeping its meals is rewarded (stability)."""
     catalog = list(catalog)
     by_id = {p.product_id: p for p in catalog}
     locked = [m for m in (locked or []) if m.items]
@@ -177,8 +180,17 @@ def optimize(catalog: Iterable[Product], c: Constraints, locked: Optional[list[M
     liked = [y[k, pid] for k in meals for pid in pids if pid in c.liked_product_ids]
     penalty = sum(slacks) if slacks else 0
 
-    model.Minimize(W_NUTRITION * penalty + cost - LIKE_BONUS * sum(liked))
-    _add_greedy_hint(model, x, y, meals, cands, c)
+    kept = []
+    if previous is not None:
+        prev = {(m.day, m.slot.value): {i.product_id: i.quantity for i in m.items} for m in previous.meals}
+        for k in meals:
+            for pid, qty in prev.get(k, {}).items():
+                if (k, pid) in y:
+                    kept.append(y[k, pid])
+                    model.AddHint(x[k, pid], qty)
+    model.Minimize(W_NUTRITION * penalty + cost - LIKE_BONUS * sum(liked) - STABILITY_BONUS * sum(kept))
+    if previous is None:
+        _add_greedy_hint(model, x, y, meals, cands, c)
 
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_limit_s

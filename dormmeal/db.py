@@ -86,3 +86,48 @@ def fetch_catalog(conn: sqlite3.Connection) -> list[Product]:
         d["verified"] = bool(d["verified"])
         out.append(Product(**d))
     return out
+
+
+# ---------------- users, plans, preferences, events (week 5) ----------------
+def save_user(conn: sqlite3.Connection, user_id: str, constraints) -> None:
+    conn.execute("INSERT OR REPLACE INTO users (user_id, constraints_json) VALUES (?, ?)",
+                 (user_id, constraints.model_dump_json()))
+    conn.commit()
+
+
+def load_user(conn: sqlite3.Connection, user_id: str):
+    from .models import Constraints
+    row = conn.execute("SELECT constraints_json FROM users WHERE user_id = ?", (user_id,)).fetchone()
+    return Constraints.model_validate_json(row["constraints_json"]) if row else None
+
+
+def save_plan(conn: sqlite3.Connection, user_id: str, plan, total_cost_krw: int, valid: bool) -> int:
+    cur = conn.execute("INSERT INTO plans (user_id, plan_json, total_cost_krw, valid) VALUES (?, ?, ?, ?)",
+                       (user_id, plan.model_dump_json(), total_cost_krw, int(valid)))
+    conn.commit()
+    return cur.lastrowid
+
+
+def latest_plan(conn: sqlite3.Connection, user_id: str):
+    from .models import MealPlan
+    row = conn.execute("SELECT plan_json FROM plans WHERE user_id = ? ORDER BY plan_id DESC LIMIT 1",
+                       (user_id,)).fetchone()
+    return MealPlan.model_validate_json(row["plan_json"]) if row else None
+
+
+def set_preference(conn: sqlite3.Connection, user_id: str, product_id: str, liked: bool) -> None:
+    conn.execute("INSERT OR REPLACE INTO preferences (user_id, product_id, liked) VALUES (?, ?, ?)",
+                 (user_id, product_id, int(liked)))
+    conn.commit()
+
+
+def get_preferences(conn: sqlite3.Connection, user_id: str) -> tuple[list[str], list[str]]:
+    rows = conn.execute("SELECT product_id, liked FROM preferences WHERE user_id = ? ORDER BY product_id",
+                        (user_id,)).fetchall()
+    return [r["product_id"] for r in rows if r["liked"]], [r["product_id"] for r in rows if not r["liked"]]
+
+
+def log_event(conn: sqlite3.Connection, user_id: str, raw_text: str, event=None) -> None:
+    conn.execute("INSERT INTO event_logs (user_id, raw_text, event_json) VALUES (?, ?, ?)",
+                 (user_id, raw_text, event.model_dump_json() if event is not None else None))
+    conn.commit()
