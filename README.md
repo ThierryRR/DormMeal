@@ -1,49 +1,72 @@
-# DormMeal (weeks 1-2: data layer and tools)
+# DormMeal
 
-Convenience-store meal planning agent for international students in Korean dorms.
-This repo currently contains the foundations: schemas, SQLite database, starter catalog,
-deterministic tools (`search_catalog`, `compute_totals`) and tests.
+A convenience-store meal-planning agent for international students living in Korean dorms.
+You give a weekly budget, allergies, diet, kitchen equipment and the stores you can reach (CU, GS25, Emart24).
+DormMeal returns a 7-day plan, a shopping list per store with English shelf descriptions, and the daily
+nutrition. When something changes during the week (sold out, skipped meal, new budget, broken
+microwave), it replans the rest of the week.
 
-## Setup
+**Core idea:** an LLM never computes a number. Cost, promos (1+1, 2+1) and nutrition are computed by code,
+the plan is built by a CP-SAT optimizer, and a Verifier checks every plan before the user sees it.
+
+> ⚠️ `data/catalog_v1.csv` holds **150 estimated products** (`verified = false`). Replace them with
+> real label values before drawing conclusions about real prices (see `docs/DATA_COLLECTION_GUIDE.md`).
+
+## Quick start
 ```bash
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
-pytest -q
-python scripts/load_catalog.py        # creates dormmeal.db from data/catalog_v1.csv
+pytest -q                                   # 74 tests
+streamlit run app.py                        # user interface on http://localhost:8501
+```
+Optional: `export GEMINI_API_KEY=...` lets Gemini parse free-text requests. Without it a rule-based parser is used.
+
+## How it works
+```
+request (form or free text)
+   └─ parse     parser.py     Gemini JSON -> Constraints (Pydantic), rule-based fallback
+   └─ search    tools.py      remove products with an allergen, missing equipment, wrong diet/store, disliked
+   └─ optimize  optimizer.py  CP-SAT: 1 main + up to 2 sides per meal, budget with promos, variety, nutrition
+   └─ verify    verifier.py   budget, allergens, equipment, diet, stores, variety, structure, nutrition
+   └─ explain   agent.py      cost, savings, nutrition, assumptions (numbers from code only)
+event (free text) -> events.py -> lock eaten meals -> re-optimize the rest (stability bonus)
+```
+Details: `docs/ARCHITECTURE.md`.
+
+## Repository
+```
+app.py                    Streamlit interface
+dormmeal/models.py        Pydantic schemas (Product, Constraints, MealPlan, Event, ...)
+dormmeal/tools.py         catalog loading, search_catalog, compute_totals (promo logic)
+dormmeal/optimizer.py     CP-SAT meal planner
+dormmeal/verifier.py      plan checks
+dormmeal/parser.py        free text -> Constraints
+dormmeal/events.py        free text -> Event, apply_event
+dormmeal/agent.py         workflow, replanning, shopping list and explanation
+dormmeal/llm.py           optional Gemini client (OpenAI-compatible endpoint)
+dormmeal/db.py            SQLite: products, users, plans, preferences, event logs
+dormmeal/validation.py    catalog quality report
+data/catalog_v1.csv       150 products (50 per chain), estimates
+benchmark/                DormMeal vs LLM-only benchmark, budget sensitivity
+notebooks/                week-10 lab: RAG project agent + simulated focus group
+docs/                     development log, architecture, evaluation, deployment, data guide, final report draft
+tests/                    unit, property and UI smoke tests
 ```
 
-## Structure
+## Useful commands
+```bash
+python scripts/validate_catalog.py          # catalog progress and anomalies
+python scripts/load_catalog.py              # rebuild dormmeal.db from the CSV
+python benchmark/run_benchmark.py           # DormMeal vs LLM-only (LLM part needs GEMINI_API_KEY)
+python benchmark/budget_sensitivity.py      # minimum budget per equipment profile
 ```
-dormmeal/models.py   Pydantic schemas (Product, Constraints, MealPlan, Event, ...)
-dormmeal/db.py       SQLite schema + catalog import
-dormmeal/tools.py    load_catalog_csv, search_catalog, compute_totals (promo logic)
-dormmeal/validation.py  catalog quality / progress report
-data/catalog_v1.csv  150 products (50 per chain), estimates, verified=false
-scripts/             load_catalog.py, validate_catalog.py
-docs/                DEVELOPMENT_LOG.md (report notes), DATA_COLLECTION_GUIDE.md
-tests/               unit + property tests (Hypothesis)
-notebooks/           week-10 lab: RAG agent + simulated focus group
-.github/workflows/   CI: runs pytest on every push
-```
-
-## IMPORTANT: catalog data
-`data/catalog_v1.csv` (150 rows) is a **set of estimates** (generic product types, approximate
-prices and nutrition). Every row has `verified = false`. Replace values by real ones
-(store website, shelf label, nutrition label), set `verified = true`, and update `last_updated`.
-Run `python scripts/validate_catalog.py` to see progress and the verified ratio (report it in your final report).
-See `docs/DATA_COLLECTION_GUIDE.md`.
 
 ## Conventions
-- `;` separates list values in CSV (allergens, diet_tags, requires).
+- `;` separates list values in the CSV (allergens, diet_tags, requires).
 - `requires`: equipment needed to prepare or store the product (microwave, kettle, fridge).
-- Promos: 1+1 -> paid = ceil(q/2); 2+1 -> paid = q - q//3; applied to total weekly quantity.
-- Nutrition always counts all units taken (including free units).
+- Promos: 1+1 -> paid = ceil(q/2); 2+1 -> paid = q - q//3; applied to the total weekly quantity.
+- Nutrition counts all units taken (free units included). Daily targets: 1,800-2,400 kcal, >= 60 g protein,
+  <= 2,300 mg sodium, scaled by (meals eaten that day / 3).
 
-## Push to GitHub
-```bash
-# create an empty repository on github.com first (no README), then:
-git remote add origin https://github.com/<your-username>/dormmeal.git
-git push -u origin main
-```
-Commits were made with a placeholder e-mail. Set yours first if needed:
-`git config user.email "you@example.com"` (applies to future commits).
+## Deployment
+Docker and Streamlit Community Cloud: see `docs/DEPLOYMENT.md`. Never commit an API key.
