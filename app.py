@@ -1,4 +1,5 @@
 """DormMeal Streamlit interface.   Run: streamlit run app.py"""
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -18,6 +19,13 @@ DB = ROOT / "dormmeal.db"
 DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 st.set_page_config(page_title="DormMeal", page_icon="🍙", layout="wide")
+
+# Streamlit Community Cloud: the key is stored in the app's Secrets, never in the repository
+try:
+    if "GEMINI_API_KEY" in st.secrets and not os.environ.get("GEMINI_API_KEY"):
+        os.environ["GEMINI_API_KEY"] = st.secrets["GEMINI_API_KEY"]
+except Exception:   # no secrets file: run without the LLM
+    pass
 
 
 @st.cache_resource
