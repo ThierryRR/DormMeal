@@ -104,3 +104,9 @@ def test_optimizer_no_candidates():
     c = Constraints(weekly_budget_krw=70000, equipment=[], diet="halal_friendly")
     r = optimize(CATALOG, c, time_limit_s=1)
     assert r.status == "infeasible" and "No product" in r.message
+
+
+def test_optimizer_explains_too_few_main_dishes():
+    c = Constraints(weekly_budget_krw=75000, equipment=["microwave", "fridge"], allergies=["wheat"], stores=["GS25"])
+    r = optimize(CATALOG, c, time_limit_s=1)
+    assert r.status == "infeasible" and "main dishes" in r.message
