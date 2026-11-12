@@ -46,6 +46,8 @@ def load_catalog_csv(path: str | Path) -> list[Product]:
                 last_updated=row["last_updated"],
                 verified=row["verified"].strip().lower() == "true",
                 source=row.get("source", "") or "",
+                name_ko=row.get("name_ko", "") or "",
+                allergens_known=(row.get("allergens_known") or "true").strip().lower() == "true",
             ))
     return products
 
@@ -72,6 +74,7 @@ def search_catalog(
     category: Optional[str] = None,
     exclude_ids: Optional[list[str]] = None,
     promo_only: bool = False,
+    verified_only: bool = False,
 ) -> list[Product]:
     """Return products compatible with the user's hard constraints (never an unsafe one)."""
     available = set(equipment or [])
@@ -84,6 +87,10 @@ def search_catalog(
         if not set(p.requires) <= available:
             continue
         if banned & set(p.allergens):
+            continue
+        if banned and not p.allergens_known:   # unknown allergens are never "safe" for an allergic user
+            continue
+        if verified_only and not p.verified:
             continue
         if diet != Diet.NONE and diet not in p.diet_tags:
             continue
@@ -101,7 +108,8 @@ def search_catalog(
 
 def search_for_constraints(catalog: Iterable[Product], c: Constraints) -> list[Product]:
     return search_catalog(catalog, stores=c.stores, equipment=c.equipment, allergies=c.allergies,
-                          diet=c.diet, exclude_ids=c.disliked_product_ids + c.unavailable_product_ids)
+                          diet=c.diet, exclude_ids=c.disliked_product_ids + c.unavailable_product_ids,
+                          verified_only=c.sourced_only)
 
 
 def compute_totals(plan: MealPlan, catalog: Iterable[Product]) -> Totals:

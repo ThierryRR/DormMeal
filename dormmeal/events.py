@@ -64,7 +64,8 @@ def parse_event_rules(text: str, plan: Optional[MealPlan], catalog: list[Product
                       today: Optional[int] = None) -> Optional[Event]:
     t = text.lower()
     store = next((s for s, w in ((Store.CU, r"\bcu\b"), (Store.GS25, r"\bgs ?25\b"),
-                                 (Store.EMART24, r"\bemart ?24\b")) if re.search(w, t)), None)
+                                 (Store.EMART24, r"\bemart ?24\b"),
+                                 (Store.SEVEN_ELEVEN, r"\b(?:7-?eleven|seven ?eleven)\b")) if re.search(w, t)), None)
     if re.search(r"sold out|out of stock|not available|no more|couldn't find|could not find|wasn't there", t):
         in_plan = {i.product_id for m in plan.meals for i in m.items} if plan else set()
         pool = [p for p in catalog if p.product_id in in_plan] or catalog
@@ -92,7 +93,7 @@ def parse_event_rules(text: str, plan: Optional[MealPlan], catalog: list[Product
 
 SYSTEM = """Convert a student's message about their weekly meal plan into JSON with keys:
 type ("skip_meal" | "sold_out" | "budget_change" | "equipment_change"), day (1-7, Monday=1, or null),
-slot ("breakfast" | "lunch" | "dinner" or null), product_id (from the list or null), store (CU | GS25 | Emart24 or null),
+slot ("breakfast" | "lunch" | "dinner" or null), product_id (from the list or null), store (CU | GS25 | Emart24 | 7-Eleven or null),
 new_budget_krw (integer or null), equipment ("microwave" | "kettle" | "fridge" or null),
 available (true if the equipment was gained/fixed, false if lost/broken, else null).
 Output only JSON. Use only product_ids from this list:

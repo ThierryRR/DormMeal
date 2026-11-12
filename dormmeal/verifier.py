@@ -61,6 +61,8 @@ def verify(plan: MealPlan, catalog: Iterable[Product], c: Constraints) -> Verifi
         p = by_id[pid]
         if banned & set(p.allergens):
             v.append(Violation(rule="allergen", detail=f"{pid} {p.name_en} contains {sorted(banned & set(p.allergens))}"))
+        elif banned and not p.allergens_known:
+            v.append(Violation(rule="allergen", detail=f"{pid} {p.name_en} has no allergen information"))
         missing = set(p.requires) - equipment
         if missing:
             v.append(Violation(rule="equipment", detail=f"{pid} {p.name_en} needs {sorted(e.value for e in missing)}"))
@@ -95,7 +97,7 @@ def verify(plan: MealPlan, catalog: Iterable[Product], c: Constraints) -> Verifi
         prot = totals.daily_protein_g.get(day, 0)
         if prot < t.protein_g_per_day_min * f - _EPS:
             v.append(Violation(rule="nutrition",
-                               detail=f"day {day}: protein {prot:.0f} g < {t.protein_g_per_day_min * f:.0f} g"))
+                               detail=f"day {day}: protein {prot:.1f} g < {t.protein_g_per_day_min * f:.0f} g"))
         sod = totals.daily_sodium_mg.get(day, 0)
         if sod > t.sodium_mg_per_day_max * f + _EPS:
             v.append(Violation(rule="nutrition",

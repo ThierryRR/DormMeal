@@ -97,7 +97,8 @@ def parse_rules(text: str) -> ParsedRequest:
     if re.search(r"\bhalal\b", t):
         diet = Diet.HALAL_FRIENDLY
 
-    stores = [s for s, w in ((Store.CU, r"\bcu\b"), (Store.GS25, r"\bgs ?25\b"), (Store.EMART24, r"\bemart ?24\b"))
+    stores = [s for s, w in ((Store.CU, r"\bcu\b"), (Store.GS25, r"\bgs ?25\b"), (Store.EMART24, r"\bemart ?24\b"),
+                                                 (Store.SEVEN_ELEVEN, r"\b(?:7-?eleven|seven ?eleven|세븐일레븐)\b"))
               if re.search(w, t)]
     if not stores:
         stores = list(Store)
@@ -121,7 +122,7 @@ weekly_budget_krw (integer KRW per week, multiply a daily budget by 7, null if n
 diet ("none" | "vegetarian" | "halal_friendly"),
 allergies (list from: egg, soy, wheat, milk, fish, pork, beef, chicken, nuts; include foods the user says they cannot eat),
 equipment (list from: microwave, kettle, fridge; only what the user says they HAVE and can use),
-stores (list from: CU, GS25, Emart24; all three if not restricted),
+stores (list from: CU, GS25, Emart24, 7-Eleven; all four if not restricted),
 meals_per_day (1, 2 or 3; default 3)."""
 
 

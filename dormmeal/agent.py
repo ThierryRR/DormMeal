@@ -177,5 +177,6 @@ class DormMealAgent:
             lines.append("All budget, safety and nutrition checks passed.")
         for a in s.assumptions:
             lines.append(f"Assumption: {a}.")
-        lines.append("Note: catalog prices and nutrition are estimates until verified on real labels.")
+        n_src = sum(1 for r in shop if self.by_id[r["product_id"]].verified)
+        lines.append(f"Data: {n_src} of {len(shop)} products have sourced prices and nutrition; the others are estimates.")
         return "\n".join(lines)

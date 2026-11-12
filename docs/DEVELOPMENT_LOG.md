@@ -88,7 +88,23 @@ python scripts/load_catalog.py
    notebook live run must be executed with the key locally / in Colab.
 
 ## 11. Status and what is still needed for the final report
-- 74 tests pass (`pytest -q`).
-- Catalog: 150 products, **0% verified**: collect real labels (highest-impact task left).
+- 79 tests pass (`pytest -q`).
+- Catalog: 248 products, 98 sourced (39.5%), 150 estimates; allergens missing for sourced rows.
 - Run `python benchmark/run_benchmark.py` with `GEMINI_API_KEY` to fill the LLM-only column.
 - Run the week-10 notebook live and test the plan with real students (questions in the final report draft).
+
+## 12. Real data import (2026-11-12, version 1.1.0)
+- Source: research workbook `data/sources/base_convenience_stores_coree_v9.xlsx` (150 store-product rows, CU,
+  GS25, 7-Eleven, Emart24; nutrition from MFDS-matched Meokfit pages and manufacturer/retailer pages, confidence
+  B or C, no row at level A).
+- `scripts/import_excel.py` keeps a row only when price, kcal, protein, carbs, fat and sodium are all given:
+  **98 imported**, 43 left out (no price), 9 left out (carbs/fat missing). Nothing estimated.
+- New fields: `name_ko` (Korean label), `allergens_known` (false for all imported rows, because the workbook has
+  no allergen data: such products are excluded for allergic users; the Verifier flags them too).
+- New chain: 7-Eleven. New option `sourced_only` (UI checkbox) to plan with sourced products only.
+- Finding: the sourced data are mostly drinks, noodles, snacks and ice cream; only 12 meal products and no plain
+  protein foods (eggs, chicken breast, tofu). Sourced-only plans therefore often miss the protein target and pair
+  products in unusual ways. Next data to collect: allergens and protein foods.
+- Tried to extend with more sources cited in the workbook: Meokfit was offline (HTTP 503 "DEPLOYMENT_PAUSED"),
+  MFDS K-FIND refused connections from the cloud workspace, price.go.kr gives prices only (no nutrition). The
+  official MFDS and KCA Open APIs on data.go.kr need a free personal API key.

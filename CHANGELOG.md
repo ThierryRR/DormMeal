@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.0] - 2026-11-12
+### Added
+- 98 sourced products imported from the research workbook (`scripts/import_excel.py`, `data/catalog_sourced.csv`,
+  `data/IMPORT_REPORT.md`); `data/catalog.csv` = sourced + estimated products (248).
+- 7-Eleven chain, `name_ko`, `allergens_known`, `sourced_only` option (UI checkbox), data badge in the shopping list.
+- 5 tests (79 in total).
+### Changed
+- Products with unknown allergens are excluded for allergic users (search and Verifier).
+- App, benchmark and scripts use `data/catalog.csv`.
+
 ## [1.0.0] - 2026-11-12
 ### Added
 - Verifier and CP-SAT optimizer (week 3), request parser and agent workflow (week 4), replanning and
