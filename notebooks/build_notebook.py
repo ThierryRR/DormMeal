@@ -25,7 +25,8 @@ code(r'''
 import os, re, json, math, textwrap
 from openai import OpenAI
 
-MODEL = "gemini-2.5-flash"
+# Models to try in order: the first one that answers quickly is used (the others are fallbacks)
+CANDIDATE_MODELS = ["gemini-3.8-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-2.5-flash"]
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 
 def _get_key():
@@ -40,7 +41,21 @@ def _get_key():
 
 API_KEY = _get_key()
 MOCK = not API_KEY
-client = None if MOCK else OpenAI(api_key=API_KEY, base_url=BASE_URL)
+client = None if MOCK else OpenAI(api_key=API_KEY, base_url=BASE_URL, timeout=40, max_retries=0)
+
+def pick_model():
+    """Return the first candidate that answers within 40 s (a 404 or a timeout means: try the next one)."""
+    if MOCK:
+        return CANDIDATE_MODELS[0]
+    for m in CANDIDATE_MODELS:
+        try:
+            client.chat.completions.create(model=m, messages=[{"role": "user", "content": "Reply OK"}], max_tokens=5)
+            return m
+        except Exception as e:
+            print(f"{m}: not used ({type(e).__name__})")
+    raise RuntimeError("No Gemini model answered; check the API key and the list above.")
+
+MODEL = pick_model()
 print("Mode:", "MOCK (no API key)" if MOCK else f"LIVE ({MODEL})")
 ''')
 code(r'''
@@ -55,7 +70,16 @@ def llm(messages, tools=None, temperature=0.2, max_tokens=None):
         kw["tools"] = tools
     if max_tokens:
         kw["max_tokens"] = max_tokens
-    return client.chat.completions.create(**kw).choices[0].message
+    import time
+    for attempt in range(5):          # 503 "high demand" and 429 are temporary: wait and retry
+        try:
+            return client.chat.completions.create(**kw).choices[0].message
+        except Exception as e:
+            temporary = any(code in str(e) for code in ("503", "429", "UNAVAILABLE", "RESOURCE_EXHAUSTED"))
+            if not temporary or attempt == 4:
+                raise
+            print(f"temporary error, retry {attempt + 1}/4 in {15 * (attempt + 1)} s")
+            time.sleep(15 * (attempt + 1))
 
 def wrap(s, width=100):
     return "\n".join(textwrap.fill(p, width) if p.strip() else "" for p in s.split("\n"))
