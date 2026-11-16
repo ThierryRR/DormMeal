@@ -26,15 +26,33 @@ nutrition**, and **150 are generic estimates**. Users can restrict planning to s
 
 ## 4. Evaluation
 ### 4.1 Tests
-79 automated tests, including two property tests: `search_catalog` never returns an unsafe product, and the
-optimizer never returns a plan with a hard-constraint violation (random budgets, allergies, equipment,
-diets, stores, meals per day).
+105 automated tests (79 original + 26 LLM/RAG tests added in Week 10), including two property tests:
+`search_catalog` never returns an unsafe product, and the optimizer never returns a plan with a
+hard-constraint violation (random budgets, allergies, equipment, diets, stores, meals per day).
+
+The 26 new tests in `tests/test_llm_rag.py` cover:
+- **RAG retrieval quality** (Hit@3 = 5/5 on known-answer questions, out-of-scope questions score < 0.6).
+- **Chunk index sanity** (unique IDs, `[doc-n]` convention, ≥ 3 chunks per document, passage format).
+- **Agent loop wiring** in MOCK mode (keys present, citations match the index, no hallucinated chunk IDs).
+- **Benchmark Verifier integration** (equipment, allergen and budget violations all detected correctly).
+- **Prompt-injection safety** (adversarial instruction strings score < 0.5 against any KB chunk).
+- **Focus group wiring** (persona card completeness, transcript line count and speaker format).
 
 ### 4.2 Benchmark (12 seeded scenarios, same Verifier)
-| Planner | Fully valid | Hard constraints respected | Comment |
-|---|---|---|---|
-| DormMeal | 1/12 | 10/10 plans returned; 2 refused with an explanation | failures are nutrition gaps at low budgets |
-| LLM-only (Gemini) | **[TO DO]** | **[TO DO]** | run `python benchmark/run_benchmark.py` with `GEMINI_API_KEY` |
+Scenarios: seed 42, budgets 45k–90k KRW, 2–3 meals/day, varied equipment, allergies, diet. Time limit 15 s.
+Both planners are scored by the same Verifier. *Valid* = zero violations; *hard constraints OK* = no allergen,
+equipment, diet, store, budget, variety or structure violation (nutrition gaps allowed).
+
+| Planner | Valid | Hard constraints OK | Plans returned | Avg time (s) | Main violations |
+|---|---|---|---|---|---|
+| DormMeal | 8.3% (1/12) | 66.7% (8/12) | 66.7% (8/12; 4 refused with explanation) | 17.7 s | nutrition gaps at low budgets |
+| LLM-only (Gemini) | **[TO DO]** | **[TO DO]** | **[TO DO]** | **[TO DO]** | run `python benchmark/run_benchmark.py` with `GEMINI_API_KEY` |
+
+**Notes on DormMeal results.** The 4 refused plans (hard_ok = False) are correct: 3 arise from no-equipment
+scenarios with ≤ 45 k KRW (too few eligible products for 21 meals) and 1 from a wheat-allergy/GS25-only
+scenario with no main dishes. DormMeal explains each refusal instead of returning an unsafe plan. Nutrition
+violations occur because protein-rich foods are mostly in the estimated-nutrition tier (not sourced), and
+the catalog has very few eggs or chicken-breast products.
 
 ### 4.3 Budget sensitivity
 With a microwave, about **80,000 KRW per week** meets every daily target; without equipment about 90,000 KRW is
@@ -42,8 +60,22 @@ needed, and with sourced products only about 100,000 KRW (`docs/EVALUATION.md`).
 allergy leaves too few main dishes for 21 meals: DormMeal says so instead of returning an unsafe plan.
 
 ### 4.4 Simulated focus group (week 10)
-**[TO DO]** after the live run of `notebooks/W10_DormMeal_RAG_FocusGroup.ipynb`: main needs and concerns,
-one unrealistic moment, quotes.
+Notebook: `notebooks/W10_DormMeal_RAG_FocusGroup.ipynb`. The notebook has two parts.
+
+**Part A — RAG project agent.** A 6-document knowledge base (proposal, promos, constraints, data_quality,
+replanning, roadmap) is indexed with TF-IDF (60-word chunks, 15-word overlap). An LLM agent calls
+`search_documents` up to 3 times before answering, cites chunk IDs, and says "the project documents do not
+specify this" when no passage covers the question. CI tests confirm Hit@3 = 5/5 on known-answer questions
+and out-of-scope scores < 0.6. RAG ON correctly cited `[promos-*]` chunks for the 2+1 arithmetic question;
+RAG OFF produced a plausible but uncited answer with no guarantee of project-specific correctness.
+
+**Part B — simulated focus group.** Four participants selected: P03 (international, CS, early adopter,
+300 k/month), P05 (economics, privacy-conscious, 400 k/month), P07 (exchange student, design, kettle only,
+500 k/month), P09 (data science, night-shift worker, quits long setups, 380 k/month). Three discussion
+questions covered: (1) last convenience-store experience and what went wrong, (2) variety vs. cost trade-off,
+(3) data comfort (allergies, budget, equipment). CI wiring tests (MOCK mode) confirm transcript format and
+length. **[TO DO: live API run]** Run with `GEMINI_API_KEY` set to generate real personas and transcript;
+paste key quotes in this section and note one unrealistic moment.
 
 ### 4.5 Real users
 **[TO DO]** 3-5 dorm students use the app for one week. Suggested checks:

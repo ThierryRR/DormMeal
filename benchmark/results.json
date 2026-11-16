@@ -3,18 +3,18 @@
     "dormmeal": {
       "n": 12,
       "valid_pct": 8.3,
-      "hard_constraints_ok_pct": 83.3,
-      "parsed_pct": 83.3,
-      "avg_seconds": 8.4,
+      "hard_constraints_ok_pct": 66.7,
+      "parsed_pct": 66.7,
+      "avg_seconds": 17.7,
       "violations_total": {
-        "nutrition": 84,
-        "no_plan": 2
+        "nutrition": 63,
+        "no_plan": 4
       }
     },
     "llm_only": null,
     "llm_model": null,
-    "time_limit_s": 10.0,
-    "catalog": "catalog.csv (98 sourced + 150 estimated products)"
+    "time_limit_s": 15.0,
+    "catalog": "catalog.csv"
   },
   "rows": [
     {
@@ -37,11 +37,11 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 9
+          "nutrition": 10
         },
-        "cost": 45000,
+        "cost": 44800,
         "hard_ok": true,
-        "seconds": 10.1,
+        "seconds": 15.2,
         "status": "feasible"
       }
     },
@@ -65,14 +65,14 @@
       },
       "dormmeal": {
         "valid": false,
-        "parsed": true,
+        "parsed": false,
         "violations": {
-          "nutrition": 14
+          "no_plan": 1
         },
-        "cost": 44900,
-        "hard_ok": true,
-        "seconds": 10.1,
-        "status": "feasible"
+        "cost": null,
+        "hard_ok": false,
+        "seconds": 30.5,
+        "status": "timeout"
       }
     },
     {
@@ -95,11 +95,11 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 2
+          "nutrition": 1
         },
-        "cost": 44700,
+        "cost": 45000,
         "hard_ok": true,
-        "seconds": 10.1,
+        "seconds": 15.3,
         "status": "feasible"
       }
     },
@@ -125,9 +125,9 @@
         "valid": true,
         "parsed": true,
         "violations": {},
-        "cost": 74000,
+        "cost": 75400,
         "hard_ok": true,
-        "seconds": 10.0,
+        "seconds": 15.1,
         "status": "feasible"
       }
     },
@@ -151,11 +151,11 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 4
+          "nutrition": 7
         },
-        "cost": 64600,
+        "cost": 64900,
         "hard_ok": true,
-        "seconds": 10.1,
+        "seconds": 15.4,
         "status": "feasible"
       }
     },
@@ -177,14 +177,14 @@
       },
       "dormmeal": {
         "valid": false,
-        "parsed": true,
+        "parsed": false,
         "violations": {
-          "nutrition": 14
+          "no_plan": 1
         },
-        "cost": 44800,
-        "hard_ok": true,
-        "seconds": 10.1,
-        "status": "feasible"
+        "cost": null,
+        "hard_ok": false,
+        "seconds": 30.3,
+        "status": "timeout"
       }
     },
     {
@@ -240,9 +240,9 @@
         "violations": {
           "nutrition": 4
         },
-        "cost": 44700,
+        "cost": 44800,
         "hard_ok": true,
-        "seconds": 10.0,
+        "seconds": 15.1,
         "status": "feasible"
       }
     },
@@ -271,8 +271,8 @@
         },
         "cost": null,
         "hard_ok": false,
-        "seconds": 0.0,
-        "status": "infeasible"
+        "seconds": 30.2,
+        "status": "timeout"
       }
     },
     {
@@ -295,11 +295,11 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 13
+          "nutrition": 16
         },
-        "cost": 54700,
+        "cost": 54950,
         "hard_ok": true,
-        "seconds": 10.1,
+        "seconds": 15.4,
         "status": "feasible"
       }
     },
@@ -324,11 +324,11 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 15
+          "nutrition": 14
         },
-        "cost": 55000,
+        "cost": 54100,
         "hard_ok": true,
-        "seconds": 10.1,
+        "seconds": 15.2,
         "status": "feasible"
       }
     },
@@ -352,11 +352,11 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 9
+          "nutrition": 11
         },
-        "cost": 44700,
+        "cost": 45000,
         "hard_ok": true,
-        "seconds": 10.0,
+        "seconds": 15.1,
         "status": "feasible"
       }
     }

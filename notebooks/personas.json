@@ -1,0 +1,18 @@
+{
+  "P03": {
+    "card": "- Year: 2nd year (international student)\n- Major: Computer Science\n- Travel time to campus: 5 min walk\n- Housing: on-campus dormitory, shared kitchen with one microwave per floor\n- Part-time job: none (visa limits work hours)\n- Smartphone use: 6+ h/day\n- Attitude to new apps: early adopter, installs new apps often\n- Spending money: 300,000 KRW/month",
+    "persona": "MOCK answer [mock-1]"
+  },
+  "P05": {
+    "card": "- Year: 3rd year (international student)\n- Major: Economics\n- Travel time to campus: 10 min walk\n- Housing: university dormitory, single room with a small fridge\n- Part-time job: none\n- Smartphone use: 3-4 h/day\n- Attitude to new apps: deletes apps that ask for too much personal data\n- Spending money: 400,000 KRW/month",
+    "persona": "MOCK answer [mock-1]"
+  },
+  "P07": {
+    "card": "- Year: 1st year (exchange student, one semester)\n- Major: Design\n- Travel time to campus: 5 min walk\n- Housing: on-campus dormitory, no cooking allowed in rooms, kettle in common room\n- Part-time job: none\n- Smartphone use: 5 h/day\n- Attitude to new apps: curious but uses English-only apps\n- Spending money: 500,000 KRW/month",
+    "persona": "MOCK answer [mock-1]"
+  },
+  "P09": {
+    "card": "- Year: 4th year (international student)\n- Major: Data Science\n- Travel time to campus: 10 min walk\n- Housing: university dormitory, shared room\n- Part-time job: convenience store night shift 2 nights/week\n- Smartphone use: 5 h/day\n- Attitude to new apps: tries apps, quits if setup is long\n- Spending money: 380,000 KRW/month",
+    "persona": "MOCK answer [mock-1]"
+  }
+}

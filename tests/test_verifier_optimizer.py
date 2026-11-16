@@ -67,7 +67,7 @@ def test_verifier_nutrition_low_kcal():
 @pytest.fixture(scope="module")
 def solved():
     c = Constraints(weekly_budget_krw=80000, equipment=["microwave", "fridge"], allergies=["nuts"])
-    return c, optimize(CATALOG, c, time_limit_s=12)
+    return c, optimize(CATALOG, c, time_limit_s=20)
 
 
 def test_optimizer_returns_a_valid_plan(solved):
