@@ -1,0 +1,41 @@
+{
+  "KR-CVS-0065": [],
+  "KR-CVS-0089": [
+    "milk",
+    "nuts",
+    "soy"
+  ],
+  "KR-CVS-0097": [
+    "egg",
+    "wheat",
+    "milk"
+  ],
+  "KR-CVS-0099": [],
+  "KCA-0011": [],
+  "KCA-0012": [],
+  "KCA-0013": [
+    "nuts"
+  ],
+  "KCA-0018": [],
+  "KCA-0026": [
+    "wheat",
+    "milk",
+    "nuts",
+    "nuts",
+    "soy"
+  ],
+  "KCA-0027": [
+    "wheat",
+    "milk",
+    "nuts",
+    "nuts",
+    "soy"
+  ],
+  "KCA-0028": [
+    "wheat",
+    "milk",
+    "nuts",
+    "nuts",
+    "soy"
+  ]
+}

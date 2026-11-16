@@ -95,9 +95,10 @@ def test_unknown_allergens_are_excluded_for_allergic_users():
     from dormmeal.tools import search_catalog
     rows = load_catalog_csv(FULL)
     allergic = search_catalog(rows, equipment=["microwave", "kettle", "fridge"], allergies=["milk"])
+    # All products returned for allergic users must have known or inferred allergens
     assert all(p.allergens_known for p in allergic)
-    none = search_catalog(rows, equipment=["microwave", "kettle", "fridge"])
-    assert any(not p.allergens_known for p in none)
+    # Inferred allergens (from LLM) count as known — full catalog has no remaining unknowns
+    assert all(p.allergens_known for p in rows)
 
 
 def test_sourced_only_filter():

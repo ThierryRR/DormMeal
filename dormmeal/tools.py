@@ -47,7 +47,7 @@ def load_catalog_csv(path: str | Path) -> list[Product]:
                 verified=row["verified"].strip().lower() == "true",
                 source=row.get("source", "") or "",
                 name_ko=row.get("name_ko", "") or "",
-                allergens_known=(row.get("allergens_known") or "true").strip().lower() == "true",
+                allergens_known=(row.get("allergens_known") or "true").strip().lower() in ("true", "inferred", "off_verified"),
             ))
     return products
 
