@@ -2,17 +2,31 @@
   "summary": {
     "dormmeal": {
       "n": 12,
-      "valid_pct": 8.3,
+      "valid_pct": 16.7,
       "hard_constraints_ok_pct": 66.7,
       "parsed_pct": 66.7,
-      "avg_seconds": 17.7,
+      "avg_seconds": 17.8,
       "violations_total": {
-        "nutrition": 63,
+        "nutrition": 59,
         "no_plan": 4
       }
     },
-    "llm_only": null,
-    "llm_model": null,
+    "llm_only": {
+      "n": 12,
+      "valid_pct": 0.0,
+      "hard_constraints_ok_pct": 0.0,
+      "parsed_pct": 100.0,
+      "avg_seconds": 3.1,
+      "violations_total": {
+        "equipment": 62,
+        "variety": 13,
+        "budget": 10,
+        "nutrition": 133,
+        "store": 5,
+        "allergen": 7
+      }
+    },
+    "llm_model": "gemini-3.1-flash-lite",
     "time_limit_s": 15.0,
     "catalog": "catalog.csv"
   },
@@ -37,12 +51,25 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 10
+          "nutrition": 8
         },
-        "cost": 44800,
+        "cost": 44000,
         "hard_ok": true,
         "seconds": 15.2,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 4,
+          "variety": 1,
+          "budget": 1,
+          "nutrition": 13
+        },
+        "cost": 115300,
+        "hard_ok": false,
+        "seconds": 4.1
       }
     },
     {
@@ -71,8 +98,20 @@
         },
         "cost": null,
         "hard_ok": false,
-        "seconds": 30.5,
+        "seconds": 30.4,
         "status": "timeout"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "store": 2,
+          "budget": 1,
+          "nutrition": 5
+        },
+        "cost": 120500,
+        "hard_ok": false,
+        "seconds": 4.7
       }
     },
     {
@@ -92,15 +131,25 @@
         "meals_per_day": 2
       },
       "dormmeal": {
-        "valid": false,
+        "valid": true,
         "parsed": true,
-        "violations": {
-          "nutrition": 1
-        },
+        "violations": {},
         "cost": 45000,
         "hard_ok": true,
         "seconds": 15.3,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 6,
+          "budget": 1,
+          "nutrition": 10
+        },
+        "cost": 106600,
+        "hard_ok": false,
+        "seconds": 2.9
       }
     },
     {
@@ -125,10 +174,24 @@
         "valid": true,
         "parsed": true,
         "violations": {},
-        "cost": 75400,
+        "cost": 75200,
         "hard_ok": true,
-        "seconds": 15.1,
+        "seconds": 15.2,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "allergen": 2,
+          "equipment": 3,
+          "variety": 3,
+          "budget": 1,
+          "nutrition": 7
+        },
+        "cost": 105600,
+        "hard_ok": false,
+        "seconds": 2.7
       }
     },
     {
@@ -151,12 +214,25 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 7
+          "nutrition": 6
         },
-        "cost": 64900,
+        "cost": 64700,
         "hard_ok": true,
-        "seconds": 15.4,
+        "seconds": 15.6,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 6,
+          "variety": 4,
+          "budget": 1,
+          "nutrition": 9
+        },
+        "cost": 127400,
+        "hard_ok": false,
+        "seconds": 3.2
       }
     },
     {
@@ -185,6 +261,18 @@
         "hard_ok": false,
         "seconds": 30.3,
         "status": "timeout"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 12,
+          "budget": 1,
+          "nutrition": 8
+        },
+        "cost": 103100,
+        "hard_ok": false,
+        "seconds": 3.5
       }
     },
     {
@@ -214,6 +302,18 @@
         "hard_ok": false,
         "seconds": 0.0,
         "status": "infeasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 10,
+          "variety": 1,
+          "nutrition": 11
+        },
+        "cost": 71400,
+        "hard_ok": false,
+        "seconds": 3.3
       }
     },
     {
@@ -238,12 +338,27 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 4
+          "nutrition": 5
         },
-        "cost": 44800,
+        "cost": 44900,
         "hard_ok": true,
         "seconds": 15.1,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 5,
+          "allergen": 2,
+          "store": 1,
+          "variety": 1,
+          "budget": 1,
+          "nutrition": 14
+        },
+        "cost": 57600,
+        "hard_ok": false,
+        "seconds": 2.3
       }
     },
     {
@@ -273,6 +388,18 @@
         "hard_ok": false,
         "seconds": 30.2,
         "status": "timeout"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "allergen": 3,
+          "budget": 1,
+          "nutrition": 14
+        },
+        "cost": 135000,
+        "hard_ok": false,
+        "seconds": 2.8
       }
     },
     {
@@ -295,12 +422,25 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 16
+          "nutrition": 18
         },
-        "cost": 54950,
+        "cost": 53450,
         "hard_ok": true,
-        "seconds": 15.4,
+        "seconds": 15.3,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 2,
+          "store": 2,
+          "variety": 2,
+          "nutrition": 20
+        },
+        "cost": 53680,
+        "hard_ok": false,
+        "seconds": 2.9
       }
     },
     {
@@ -324,12 +464,23 @@
         "valid": false,
         "parsed": true,
         "violations": {
-          "nutrition": 14
+          "nutrition": 11
         },
-        "cost": 54100,
+        "cost": 55000,
         "hard_ok": true,
         "seconds": 15.2,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "budget": 1,
+          "nutrition": 11
+        },
+        "cost": 136400,
+        "hard_ok": false,
+        "seconds": 2.6
       }
     },
     {
@@ -356,8 +507,21 @@
         },
         "cost": 45000,
         "hard_ok": true,
-        "seconds": 15.1,
+        "seconds": 15.4,
         "status": "feasible"
+      },
+      "llm_only": {
+        "valid": false,
+        "parsed": true,
+        "violations": {
+          "equipment": 14,
+          "variety": 1,
+          "budget": 1,
+          "nutrition": 11
+        },
+        "cost": 118300,
+        "hard_ok": false,
+        "seconds": 2.5
       }
     }
   ]

@@ -13,7 +13,7 @@ from pydantic import BaseModel, ValidationError
 
 T = TypeVar("T", bound=BaseModel)
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
-MODEL = os.environ.get("DORMMEAL_LLM_MODEL", "gemini-2.5-flash")
+MODEL = os.environ.get("DORMMEAL_LLM_MODEL", "gemini-3.1-flash-lite")
 _client = None
 
 

@@ -5,5 +5,5 @@ Both planners are scored by the same Verifier. *Valid* = no violation at all; *h
 
 | Planner | Valid | Hard constraints OK | Plan parsed | Avg time (s) | Violations (count) |
 |---|---|---|---|---|---|
-| DormMeal | 8.3% | 66.7% | 66.7% | 17.7 | {'nutrition': 63, 'no_plan': 4} |
-| LLM-only | not run (no GEMINI_API_KEY) | | | | |
+| DormMeal | 16.7% | 66.7% | 66.7% | 17.8 | {'nutrition': 59, 'no_plan': 4} |
+| LLM-only | 0.0% | 0.0% | 100.0% | 3.1 | {'equipment': 62, 'variety': 13, 'budget': 10, 'nutrition': 133, 'store': 5, 'allergen': 7} |

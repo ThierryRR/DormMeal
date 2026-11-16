@@ -1,29 +1,29 @@
 [MODERATOR] Q1: Think of last week. When did you eat from a convenience store, how did you decide what to buy, and what went wrong (money, time, health, not understanding the label)?
 
-[P03] MOCK answer [mock-1]
+[P03] Last week, I relied on convenience store meals almost every day to stay under my 300,000 KRW budget. I usually just grab whatever 2+1 deal is available at GS25, but the lack of nutritional balance is a real issue—it's mostly just cheap carbs. I’m skeptical about *DormMeal*, though. If I have to manually input my inventory or updates every time a shelf is empty, that's too much friction. I need something automated that just pulls the current stock data from the apps.
 
-[P05] MOCK answer [mock-1]
+[P05] Last week, I relied on convenience store protein bars and eggs to supplement my cafeteria diet, as my 400,000 KRW budget leaves little room for fresh meat. I decide based purely on price-per-gram calculations. My main issue is the high sodium content in most 2+1 deals, which affects my long-term health. Regarding *DormMeal*, I’m interested, but only if it doesn't require invasive permissions. If it tracks my location or contacts unnecessarily, I’ll uninstall it immediately. Efficiency is key, but privacy is non-negotiable.
 
-[P07] MOCK answer [mock-1]
+[P07] I eat at convenience stores every day since I can’t cook in my dorm. I usually just grab whatever looks filling because I’m exhausted after my studio classes. My biggest struggle is the language barrier; I often can't read the nutritional info on packaging, so I just guess. I’m definitely over budget by mid-month. Honestly, an English app like DormMeal sounds helpful, especially for tracking those 1+1 deals. If it handles the planning for me, it would save me so much stress.
 
-[P09] MOCK answer [mock-1]
+[P09] Last week, I relied on convenience store meals during my night shifts. I choose based on protein-to-price ratios, but often end up over my sodium limit due to limited options. My biggest issue is the time cost of scanning shelves for promos while on a tight schedule. I’d use *DormMeal* if the setup is zero-touch—no manual entry. If it can pull real-time inventory and calculate the most efficient path for my 380,000 KRW budget without a tedious onboarding process, it’s worth testing.
 
 [MODERATOR] Q2: DormMeal can make the plan cheaper by repeating the same promo products (for example the same 2+1 rice three times a week), or more varied for more money. Which would you choose, and where is your limit?
 
-[P05] MOCK answer [mock-1]
+[P05] I prioritize cost-efficiency, so I’d choose the repetitive plan. With a 400,000 KRW budget, I can’t afford variety if it compromises my protein intake. However, I’d set a hard limit: the plan must ensure a minimum of 60g of protein daily. If the app asks for my location or contact access to "optimize" this, I’m out. Data privacy is a significant economic asset; I won't trade my personal information just for a meal plan that suggests repetitive rice.
 
-[P07] MOCK answer [mock-1]
+[P07] I would definitely choose the repetitive plan. With only 500,000 KRW a month, saving money is my absolute priority. I don’t mind eating the same 2+1 rice or noodles if it helps me stay under budget and avoids the stress of guessing what’s inside the packaging. My only limit is that the app must stay in English and be easy to use. If it simplifies my shopping and keeps me fed until the end of the month, I’m happy.
 
-[P09] MOCK answer [mock-1]
+[P09] I’ll take the repetitive plan. With my 380,000 KRW budget and two night shifts a week, I don't have the luxury of variety. Efficiency is my priority; if the app identifies high-protein 2+1 deals, I’ll stick to those to keep my costs down and protein levels up. My limit is simple: if the app requires more than two minutes of manual setup or data entry, it’s useless to me. I need it to be fully automated and frictionless.
 
-[P03] MOCK answer [mock-1]
+[P03] I’ll take the repetitive plan. At 300,000 KRW, variety is a luxury I can’t afford. However, I agree with P09 that manual entry is a dealbreaker. If I have to input my inventory, I’m out. The app needs to pull real-time API data from GS25 or CU apps to be viable. My limit is simple: if it isn't fully automated, it’s just another chore. I need a "set it and forget it" solution that optimizes for calories per won.
 
 [MODERATOR] Q3: To plan, DormMeal asks for your allergies, budget and equipment and remembers products you liked or rejected. What would make you comfortable or uncomfortable giving this information, and what would make you stop using it?
 
-[P07] MOCK answer [mock-1]
+[P07] I am comfortable sharing my budget, allergies, and equipment because it is essential for the app to work. It saves me from guessing what I can actually eat with just a kettle. However, I would stop using it if the interface became cluttered with Korean text or if it felt like I was doing too much homework to get a meal plan. If it stays simple, English-only, and helps me save my 500,000 KRW, I am happy to keep using it.
 
-[P09] MOCK answer [mock-1]
+[P09] I’m comfortable providing that data since it’s technically necessary for the algorithm to function. However, I’ll stop using it immediately if the onboarding process forces me to manually log my inventory or rate products one by one. I need a "set it and forget it" system. If the app requires more than two minutes of setup or starts sending excessive notifications, it becomes a time-sink. For me, efficiency is the only metric that matters.
 
-[P03] MOCK answer [mock-1]
+[P03] I’m comfortable sharing that data because it’s a necessary input for the algorithm to optimize my 300,000 KRW budget. However, I’d stop using it immediately if it forced me to manually rate products or log inventory. That’s inefficient. If the app requires constant manual interaction instead of pulling real-time API data from convenience store apps, it’s just another burden. I need a "set it and forget it" tool; if it isn't fully automated, it’s technically failing its primary purpose.
 
-[P05] MOCK answer [mock-1]
+[P05] I’m comfortable sharing budget, allergy, and equipment data because it’s logically necessary for optimization. However, I’ll delete the app immediately if it requests access to my contacts, location, or photos. Those permissions are irrelevant to meal planning and suggest data harvesting. Also, if the "product rejection" feature requires me to manually rate items instead of just tracking my purchase history, it becomes an inefficient chore. I value my privacy as an economic asset; don't ask for data that doesn't directly serve my nutritional goals.

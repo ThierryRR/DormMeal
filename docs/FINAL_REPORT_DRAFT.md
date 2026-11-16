@@ -45,8 +45,8 @@ equipment, diet, store, budget, variety or structure violation (nutrition gaps a
 
 | Planner | Valid | Hard constraints OK | Plans returned | Avg time (s) | Main violations |
 |---|---|---|---|---|---|
-| DormMeal | 8.3% (1/12) | 66.7% (8/12) | 66.7% (8/12; 4 refused with explanation) | 17.7 s | nutrition gaps at low budgets |
-| LLM-only (Gemini) | **[TO DO]** | **[TO DO]** | **[TO DO]** | **[TO DO]** | run `python benchmark/run_benchmark.py` with `GEMINI_API_KEY` |
+| DormMeal | 16.7% (2/12) | 66.7% (8/12) | 66.7% (8/12; 4 refused with explanation) | 17.8 s | nutrition gaps at low budgets |
+| LLM-only (Gemini `gemini-3.1-flash-lite`) | 0% (0/12) | 0% (0/12) | 100% (12/12) | 3.1 s | equipment: 62, nutrition: 133, variety: 13, budget: 10, allergen: 7, store: 5 |
 
 **Notes on DormMeal results.** The 4 refused plans (hard_ok = False) are correct: 3 arise from no-equipment
 scenarios with ≤ 45 k KRW (too few eligible products for 21 meals) and 1 from a wheat-allergy/GS25-only
@@ -62,20 +62,29 @@ allergy leaves too few main dishes for 21 meals: DormMeal says so instead of ret
 ### 4.4 Simulated focus group (week 10)
 Notebook: `notebooks/W10_DormMeal_RAG_FocusGroup.ipynb`. The notebook has two parts.
 
-**Part A — RAG project agent.** A 6-document knowledge base (proposal, promos, constraints, data_quality,
-replanning, roadmap) is indexed with TF-IDF (60-word chunks, 15-word overlap). An LLM agent calls
-`search_documents` up to 3 times before answering, cites chunk IDs, and says "the project documents do not
-specify this" when no passage covers the question. CI tests confirm Hit@3 = 5/5 on known-answer questions
-and out-of-scope scores < 0.6. RAG ON correctly cited `[promos-*]` chunks for the 2+1 arithmetic question;
-RAG OFF produced a plausible but uncited answer with no guarantee of project-specific correctness.
+**Part A — RAG project agent.** A 7-document knowledge base (proposal, promos, constraints, catalog,
+data_quality, replanning, roadmap; 25 chunks total) is indexed with TF-IDF (60-word chunks, 15-word overlap).
+An LLM agent calls `search_documents` up to 3 times before answering, cites chunk IDs, and says "the project
+documents do not specify this" when no passage covers the question. Live run confirmed Hit@3 = 5/5 on known-
+answer questions; out-of-scope question ("How many students tested the prototype?") scored 0.18. On the
+2+1 budget question, RAG ON cited `[promos-1]` and `[data_quality-2]` and correctly qualified that the
+formula was only partially specified in the KB; RAG OFF gave a confident arithmetic example (4,000 KRW for
+3 units) with no citation — plausible but unverifiable against project specifications.
 
 **Part B — simulated focus group.** Four participants selected: P03 (international, CS, early adopter,
 300 k/month), P05 (economics, privacy-conscious, 400 k/month), P07 (exchange student, design, kettle only,
 500 k/month), P09 (data science, night-shift worker, quits long setups, 380 k/month). Three discussion
 questions covered: (1) last convenience-store experience and what went wrong, (2) variety vs. cost trade-off,
-(3) data comfort (allergies, budget, equipment). CI wiring tests (MOCK mode) confirm transcript format and
-length. **[TO DO: live API run]** Run with `GEMINI_API_KEY` set to generate real personas and transcript;
-paste key quotes in this section and note one unrealistic moment.
+(3) data comfort (allergies, budget, equipment).
+
+**Live run results (Gemini `gemini-3.1-flash-lite`).** Key quotes:
+
+- *P07 on the language barrier:* "My biggest struggle is the language barrier; I often can't read the nutritional info on packaging, so I just guess." — directly motivates the English-first design.
+- *P09 on friction:* "I'd use DormMeal if the setup is zero-touch — no manual entry. If it can pull real-time inventory and calculate the most efficient path for my 380,000 KRW budget without a tedious onboarding process, it's worth testing."
+- *P05 on privacy:* "I'll delete the app immediately if it requests access to my contacts, location, or photos. Those permissions are irrelevant to meal planning and suggest data harvesting."
+- *P03 on variety:* "At 300,000 KRW, variety is a luxury I can't afford. The app needs to pull real-time API data from GS25 or CU apps to be viable."
+
+**One unrealistic moment.** All four personas independently converge on near-identical phrasing ("set it and forget it", "pull real-time API data from convenience store apps", "fully automated") across separate turns. Real focus-group participants vary in vocabulary and emphasis; this uniformity is a hallucination artifact — the LLM echoes the same design concern in four voices instead of four genuinely different ones. The substance (friction concern) is realistic; the identical wording is not.
 
 ### 4.5 Real users
 **[TO DO]** 3-5 dorm students use the app for one week. Suggested checks:
@@ -95,5 +104,5 @@ paste key quotes in this section and note one unrealistic moment.
 ## 6. Next steps
 1. Complete the data: allergen lines for the 98 sourced products, then protein foods and lunch boxes (labels in store,
    or the MFDS Open API with a free data.go.kr key).
-2. Run the LLM-only benchmark and the live notebook; fill sections 4.2 and 4.4.
+2. Run the live notebook with real participants and paste focus group quotes (section 4.4).
 3. Test with real students (section 4.5) and adjust meal rules and explanations.
