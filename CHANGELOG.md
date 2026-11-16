@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.0] - 2026-11-16
+### Added
+- FatSecret Korea brand records (`data/sources/fatsecret_matches.json`): real kcal, protein, carbs and fat for 86
+  price-only rows (sodium and allergens still estimated) and carbs/fat for 5 workbook rows that lacked them.
+- Catalog: 390 products = 150 sourced + 90 price-only + 150 generic estimates.
+- `scripts/infer_allergens.py`: informational allergen list from Korean product names (allergens_known stays false).
+### Changed
+- Several earlier estimates were wrong and are now replaced by source values (e.g. Selex protein drink 99 kcal,
+  Powerade 60 kcal per 600 ml).
+
 ## [1.2.0] - 2026-11-12
 ### Added
 - Official KCA convenience-store price survey (460 prices, price.go.kr, 2026-11-06) and Open Food Facts matches

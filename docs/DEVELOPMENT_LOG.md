@@ -131,3 +131,15 @@ Catalog: 378 products = 145 sourced + 83 price-only + 150 generic estimates.
 Also: at most one snack or ice cream per day in the optimizer (it was using promo candy as cheap calories).
 The benchmark and sensitivity tables in `docs/EVALUATION.md` were computed on the 248-product catalog (v1.1.0)
 and were not re-run.
+
+## 14. More sources (2026-11-16, version 1.3.0)
+- Tried again: Meokfit (still offline), Open Food Facts (HTTP 503), MFDS open API host (connection reset).
+- New source: FatSecret Korea brand database (search pages, 1 request per 2 s as asked by robots.txt). It gives kcal,
+  fat, carbs and protein per branded serving, matched by exact brand and package size; it does not give sodium.
+  Its values agree with the workbook's MFDS values for the same products (e.g. Yukgaejang bowl noodles 375 kcal).
+- Use: 5 workbook rows that lacked carbs/fat are now complete (Hot6 in 4 chains, Jeju Ttottot ramen); 86 of 90
+  price-only rows have real macros, only sodium and allergens are still estimates.
+- Allergens: no source gives them. `scripts/infer_allergens.py` writes a keyword-based list from the Korean name for
+  59 sourced products, for information only; the first version also used English names and produced a false "fish"
+  for an ice cream, so only Korean names are used and `allergens_known` stays false.
+- Catalog: 390 products (150 sourced, 90 price-only, 150 generic estimates).

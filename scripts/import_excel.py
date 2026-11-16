@@ -93,6 +93,8 @@ NAMES = {
     "달콤한 베지밀비": "Vegemil B sweet soy milk",
     "비타파워": "Vita Power vitamin drink",
     "농심 안성탕면": "Nongshim Ansungtangmyun (single bag)",
+    "핫식스": "Hot6 energy drink 250 ml",
+    "제주똣똣라면 용기": "Ottogi Jeju Ttottot ramen (cup)",
 }
 
 # workbook category (French) -> DormMeal category
@@ -162,7 +164,17 @@ PRICE_ONLY = {
     "돼지바(70ml)": ("Dwaeji Bar ice cream", "ice_cream", 150, 2, 17, 8, 40, "milk;wheat;soy;nuts", "", "", ""),
     "해태 부라보콘 바닐라(160ml)": ("Haitai Bravo Cone vanilla", "ice_cream", 250, 4, 33, 11, 80, "milk;wheat;soy;nuts", "", "", ""),
     "자유시간(36g)": ("Jayu Sigan chocolate bar", "snack", 180, 3, 20, 10, 40, "milk;soy;nuts", "", "", ""),
+    "삼양라면(5개입)": ("Samyang Ramen (single bag)", "instant_noodle", 500, 10, 79, 16, 1800, "soy;wheat;pork", "", "kettle",
+                   "Generic (bag noodles, no stove): put noodles in a bowl, cover with boiling water for about 5 min"),
+    "열라면(5개입)": ("Ottogi Yeul Ramen (single bag)", "instant_noodle", 510, 11, 80, 16, 1800, "soy;wheat;beef", "", "kettle",
+                  "Generic (bag noodles, no stove): put noodles in a bowl, cover with boiling water for about 5 min"),
+    "스팸 클래식(200g)": ("Spam Classic 200 g can", "protein", 680, 26, 4, 62, 2160, "pork;soy", "", "", ""),
 }
+PRICE_ONLY_UNITS = {"삼양라면(5개입)": 5, "열라면(5개입)": 5}   # surveyed pack size -> price per unit
+# FatSecret Korea brand records (kcal, protein, carbs, fat per unit; no sodium): data/sources/fatsecret_matches.json
+FATSECRET = ROOT / "data" / "sources" / "fatsecret_matches.json"
+# workbook rows that only lacked carbs and fat -> FatSecret record that supplies them
+FS_FILL = {"핫식스": "롯데 핫식스(250ml)", "제주똣똣라면 용기": "WB:제주똣똣라면 용기"}
 # Official KCA price survey name -> (Korean name in the workbook, units in the surveyed pack)
 KCA_MATCH = {
     "농심 신라면 큰사발면(114g)": ("신라면 큰사발면", 1), "팔도 왕뚜껑(110g)": ("팔도 왕뚜껑", 1),
@@ -231,8 +243,19 @@ def main():
             "last_updated": date, "verified": "true", "source": src, "name_ko": name_ko,
             "allergens_known": "false"}
 
+    import json
+    fs = json.loads(FATSECRET.read_text(encoding="utf-8"))
     kept, left_out = [], Counter()
+    fs_filled = 0
     for d in recs:
+        name = (d["Produit (nom coréen)"] or "").strip()
+        if name in FS_FILL and not isinstance(d["Glucides (g)"], (int, float)) \
+                and isinstance(d["Prix normal (KRW)"], (int, float)):
+            rec = fs[FS_FILL[name]]          # carbs and fat from FatSecret, the rest from the workbook
+            d["Glucides (g)"], d["Lipides (g)"] = rec["carbs_g"], rec["fat_g"]
+            d["Type de source"] = f"{d['Type de source']}; carbs and fat from FatSecret Korea ({rec['url']})"
+            d["Niveau confiance"] = "C"
+            fs_filled += 1
         missing = [f for f in NUM if not isinstance(d[f], (int, float))]
         if missing:
             left_out["no price in the workbook" if "Prix normal (KRW)" in missing else "carbs/fat not given"] += 1
@@ -281,18 +304,22 @@ def main():
             code, factor, units, name_en, cat, req, prep, note = OFF_MATCH[k["product_ko"]]
             o = off[code]["per_100"]
             off_added += 1
+            fsr = fs.get(k["product_ko"]) if factor == 1.0 else None   # ambiguous OFF record: FatSecret macros
             name_ko = re.sub(r"\(.*?\)", "", k["product_ko"]).strip()
             NAMES[name_ko] = name_en
             kept.append({
                 "product_id": f"OFF-{off_added:04d}", "name_en": name_en, "store": k["store"], "category": cat,
                 "price_krw": round(int(k["price_krw"]) / units), "promo_type": "none",
-                "kcal": round(o["energy-kcal_100g"] * factor), "protein_g": round(o["proteins_100g"] * factor, 1),
-                "carbs_g": round(o["carbohydrates_100g"] * factor, 1), "fat_g": round(o["fat_100g"] * factor, 1),
+                "kcal": fsr["kcal"] if fsr else round(o["energy-kcal_100g"] * factor),
+                "protein_g": fsr["protein_g"] if fsr else round(o["proteins_100g"] * factor, 1),
+                "carbs_g": fsr["carbs_g"] if fsr else round(o["carbohydrates_100g"] * factor, 1),
+                "fat_g": fsr["fat_g"] if fsr else round(o["fat_100g"] * factor, 1),
                 "sodium_mg": round(o["sodium_100g"] * 1000 * factor), "allergens": "", "diet_tags": "",
                 "requires": req, "prep_instructions": prep,
                 "description": f"{SHELF[cat]}; Korean label: {name_ko}", "last_updated": k["survey_date"],
                 "verified": "true",
-                "source": (f"Open Food Facts (crowd-sourced, ODbL) | nutrition: {off[code]['url']} ({note}) | "
+                "source": ((f"FatSecret Korea (kcal, protein, carbs, fat: {fsr['url']}) + " if fsr else "")
+                           + f"Open Food Facts (crowd-sourced, ODbL) | nutrition: {off[code]['url']} ({note}) | "
                            f"price: {KCA_URL} (KCA official survey {k['survey_date']}, {k['product_ko']}) | "
                            f"confidence C | consulted 2026-11-12"),
                 "name_ko": name_ko, "allergens_known": "false"})
@@ -308,17 +335,24 @@ def main():
             if k["product_ko"] not in PRICE_ONLY:
                 continue
             en, cat, kcal, prot, carb, fat, na, allerg, diet, req, prep = PRICE_ONLY[k["product_ko"]]
+            nutrition_note = "nutrition and allergens: ESTIMATE of typical label values, not verified"
+            if k["product_ko"] in fs:        # real macros from FatSecret; sodium and allergens stay estimates
+                rec = fs[k["product_ko"]]
+                kcal, prot, carb, fat = rec["kcal"], rec["protein_g"], rec["carbs_g"], rec["fat_g"]
+                nutrition_note = (f"kcal, protein, carbs, fat: FatSecret Korea {rec['url']} ({rec['serving']} x "
+                                  f"{rec['factor_to_unit']}) | sodium and allergens: ESTIMATE, not verified")
+            units = PRICE_ONLY_UNITS.get(k["product_ko"], 1)
             name_ko = re.sub(r"\(.*?\)", "", k["product_ko"]).strip()
             shelf = SHELF.get(cat, {"rice_bowl": "Instant meal shelf", "porridge": "Instant meal shelf",
                                     "side": "Instant food shelf", "protein": "Canned / chilled food shelf"}.get(cat, "Shelf"))
             price_only.append({
                 "product_id": f"KCP-{len(price_only) + 1:04d}", "name_en": en, "store": k["store"], "category": cat,
-                "price_krw": int(k["price_krw"]), "promo_type": "none", "kcal": kcal, "protein_g": prot,
+                "price_krw": round(int(k["price_krw"]) / units), "promo_type": "none", "kcal": kcal, "protein_g": prot,
                 "carbs_g": carb, "fat_g": fat, "sodium_mg": na, "allergens": allerg, "diet_tags": diet,
                 "requires": req, "prep_instructions": prep, "description": f"{shelf}; Korean label: {name_ko}",
                 "last_updated": k["survey_date"], "verified": "false",
-                "source": (f"price: KCA official survey {k['survey_date']} ({KCA_URL}, {k['product_ko']}) | "
-                           "nutrition and allergens: ESTIMATE of typical label values, not verified"),
+                "source": (f"price: KCA official survey {k['survey_date']} ({KCA_URL}, {k['product_ko']}"
+                           + (f", pack of {units}: price per unit" if units > 1 else "") + f") | {nutrition_note}"),
                 "name_ko": name_ko, "allergens_known": "true"})
 
     data = ROOT / "data"
@@ -346,6 +380,9 @@ def main():
         "(price.go.kr survey of 2026-11-06; nutrition from the workbook row of the same product)",
         f"- Including {off_added} store-product rows with official KCA prices and Open Food Facts nutrition "
         "(crowd-sourced, confidence C)",
+        f"- Including {fs_filled} workbook rows completed with carbs and fat from FatSecret Korea (confidence C)",
+        f"- {sum(1 for r in price_only if 'FatSecret' in r['source'])} of the {len(price_only)} price-only rows now have "
+        "kcal, protein, carbs and fat from FatSecret Korea; only their sodium and allergens are estimates",
         *[f"- Price difference: {x}" for x in kca_diff],
         *[f"- Left out, {k}: {v}" for k, v in left_out.items()],
         f"- Per store: {dict(by_store)}",
@@ -355,8 +392,8 @@ def main():
         "`allergens_known = false` and is excluded for users who declare an allergy. Vegetarian status is not "
         "documented, so no diet tag is set. Preparation hints are generic, derived from the product type.", "",
         f"`data/catalog.csv` ({len(kept) + len(price_only) + len(estimates)} products) = these {len(kept)} sourced "
-        f"products + {len(price_only)} real products with an official KCA price but estimated nutrition "
-        f"(`verified = false`, ids KCP-) + {len(estimates)} fully estimated generic products (`verified = false`, "
+        f"products + {len(price_only)} real products with an official KCA price, most with FatSecret macros and "
+        f"estimated sodium/allergens (`verified = false`, ids KCP-) + {len(estimates)} fully estimated generic products (`verified = false`, "
         "from `catalog_v1.csv`). The app can be restricted to sourced products only.",
     ]
     (data / "IMPORT_REPORT.md").write_text("\n".join(report) + "\n", encoding="utf-8")
