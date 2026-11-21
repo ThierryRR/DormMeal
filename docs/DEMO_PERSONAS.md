@@ -33,15 +33,25 @@ variety. Two plans still miss the nutrition targets on some days, like in the be
 
 ## Feedback from the students
 
-To complete after each student has looked at their plan. Scores from 1 (bad) to 5 (very good).
+Each student looked at their own plan and gave me a score from 1 (bad) to 5 (very good) and their opinion.
+The comments are their ideas, summarised in my own words.
 
-| Student | Clarity | Trust | Usefulness | Would they really eat this week? | Comment |
-|---|---|---|---|---|---|
-| Thierry Rosano | | | | | |
-| Josselin Tual | | | | | |
-| Joshua Hoorpah | | | | | |
-| Matheo Suhr | | | | | |
-| Timur Hasanov | | | | | |
+| Student | Clarity | Trust | Usefulness | Would eat this week? | Comment |
+|---|---:|---:|---:|---:|---|
+| Josselin Tual | 5/5 | 4/5 | 4/5 | 5/5 | Honestly, this makes my life easier. Reassuring to have my fish allergy taken into account. A couple of odd combos, but overall really useful! |
+| Joshua Hoorpah | 3/5 | 3/5 | 2/5 | 2/5 | Good idea, especially for students who are vegetarian and have allergies. I just wish there were more options. I wouldn't want to eat the same dishes all the time. |
+| Matheo Suhr | 4/5 | 5/5 | 4/5 | 4/5 | Really useful on a student budget. I only have a microwave, so I love that I don't need to cook anything complicated. It also leaves some money in my pocket at the end of the week. Not every meal looks amazing, but I'd definitely use this again. |
+| Timur Hasanov | 5/5 | 4/5 | 3/5 | 3/5 | Nice app and super convenient. I liked not having to worry about checking every product myself. With my budget, though, I'd hoped for a few more proper and balanced meal options. Still a good starting point. |
+| **Average (4 students)** | **4.25** | **4.00** | **3.25** | **3.50** | |
+
+My own opinion, as the author (not counted in the average): clarity 4/5, trust 4/5, usefulness 3/5, would eat
+this week 3/5. Handy when you are busy, but some food combinations are strange; I would use it for ideas and
+change some meals.
+
+**What the feedback says.** Clarity (4.25) and trust (4.0) are good: the students like that their allergy and
+budget are respected without checking every product. Usefulness (3.25) and "would eat this week" (3.5) are lower,
+for the same reason as in my plan review: some meals are strange or repetitive. Joshua, the vegetarian student
+with a nut allergy, gave the lowest scores because his plan has the least variety.
 
 ## Plan review
 
