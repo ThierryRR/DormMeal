@@ -34,6 +34,7 @@ the bug described in section 4.5), including two property tests:
 hard-constraint violation (random budgets, allergies, equipment, diets, stores, meals per day).
 
 The 26 new tests in `tests/test_llm_rag.py` cover:
+
 - **RAG retrieval quality** (Hit@3 = 5/5 on known-answer questions, out-of-scope questions score < 0.6).
 - **Chunk index sanity** (unique IDs, `[doc-n]` convention, ≥ 3 chunks per document, passage format).
 - **Agent loop wiring** in MOCK mode (keys present, citations match the index, no hallucinated chunk IDs).
@@ -121,14 +122,16 @@ logic, not the content of the allergen column. I restored the data, added two te
 (valid vocabulary, no seafood offered to a fish-allergic user), and generated all plans again.
 
 **Other findings.** The rule-based parser does not understand "lactose intolerant" (only "lactose intolerance"
-or "can't eat dairy"); a shellfish allergy cannot be declared; the info banner of the app still says that
-sourced products have no allergen data.
+or "can't eat dairy"); a shellfish allergy cannot be declared; the info banner of the app still said that
+sourced products have no allergen data (now corrected: it tells users to check the package).
 
 **Not done.** The students did not use the app for a full week: I did not check whether they could find the
 products in the store, or compare the plan cost with real receipts.
 
 ## 5. Limitations
 - **Data:** 150 of 390 products are sourced (38%); 240 have estimated nutrition (90 of them with an official price).
+  The quality of the sources varies: about 18 of the 150 sourced products take their nutrition from blogs or
+  review sites, which are weaker than a label, a manufacturer page or the official MFDS database.
   The allergens of the sourced products are **inferred from their names**, not read on the label: they can be
   incomplete, so the app must keep its "check the package" notice. Sourced rows have **few plain protein foods**
   (eggs, chicken breast), so sourced-only plans often miss the protein target. Prices are catalog reference
@@ -145,5 +148,5 @@ products in the store, or compare the plan cost with real receipts.
 1. Replace the inferred allergens of the 150 sourced products with label data (in store, or the MFDS Open API
    with a free data.go.kr key), then add protein foods and lunch boxes.
 2. Add meal rules: at least 10 g of protein per meal and at most one snack per meal.
-3. Fix the parser ("lactose intolerant", shellfish) and the outdated allergen banner in the app.
+3. Fix the parser ("lactose intolerant", shellfish allergy).
 4. Run a full one-week test with the students: products found in store, real receipts versus plan cost.
