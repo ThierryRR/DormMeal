@@ -1,7 +1,6 @@
-# DormMeal: final report (draft)
+# DormMeal: final report
 
-*Author: Rosano Thierry. Draft generated from the repository state of 2026-11-12. Sections marked
-**[TO DO]** need results that only the author can produce (real labels, real users, live LLM runs).*
+*Author: Rosano Thierry. Repository state of 2026-11-21.*
 
 ## 1. Problem
 International students in Korean dorms often eat from convenience stores. They face four problems at the
@@ -19,14 +18,18 @@ into validated structured data; a CP-SAT optimizer builds the plan; a Verifier c
 ## 3. System
 See `docs/ARCHITECTURE.md`. Workflow: parse -> search -> optimize -> verify -> explain; replanning locks
 the meals already eaten and re-optimizes the rest with a stability bonus. Interface: Streamlit.
-Data: 378 products in 4 chains (CU, GS25, 7-Eleven, Emart24). **145 are sourced** (research workbook with
-MFDS-matched nutrition and manufacturer pages; official KCA price survey of 2026-11-06; a few Open Food Facts
-records; URL and confidence level per row). **83 are real products with an official price but estimated
-nutrition**, and **150 are generic estimates**. Users can restrict planning to sourced products. SQLite stores users, plans, likes, events.
+Data: 390 products in 4 chains (CU, GS25, 7-Eleven, Emart24). **150 are sourced** (research workbook with
+MFDS-matched nutrition and manufacturer pages; official KCA price survey of 2026-11-06; FatSecret Korea and
+Open Food Facts records; URL and confidence level per row). **90 are real products with an official price but
+estimated nutrition**, and **150 are generic estimates**. The sources of the 150 sourced products give no allergen
+lines, so their allergens were inferred from the product names with Gemini (144 products) or taken from Open Food
+Facts (6 products), and marked `inferred` / `off_verified` in the catalog. Users can restrict planning to
+sourced products. SQLite stores users, plans, likes, events.
 
 ## 4. Evaluation
 ### 4.1 Tests
-105 automated tests (79 original + 26 LLM/RAG tests added in Week 10), including two property tests:
+107 automated tests (79 original, 26 LLM/RAG tests added in Week 10, and 2 catalog allergen tests added after
+the bug described in section 4.5), including two property tests:
 `search_catalog` never returns an unsafe product, and the optimizer never returns a plan with a
 hard-constraint violation (random budgets, allergies, equipment, diets, stores, meals per day).
 
@@ -52,7 +55,8 @@ equipment, diet, store, budget, variety or structure violation (nutrition gaps a
 scenarios with ≤ 45 k KRW (too few eligible products for 21 meals) and 1 from a wheat-allergy/GS25-only
 scenario with no main dishes. DormMeal explains each refusal instead of returning an unsafe plan. Nutrition
 violations occur because protein-rich foods are mostly in the estimated-nutrition tier (not sourced), and
-the catalog has very few eggs or chicken-breast products.
+the catalog has very few eggs or chicken-breast products. The benchmark was run on 2026-11-16, before the
+allergen inference, when the 150 sourced products were still excluded for allergic users.
 
 ### 4.3 Budget sensitivity
 With a microwave, about **80,000 KRW per week** meets every daily target; without equipment about 90,000 KRW is
@@ -86,23 +90,60 @@ questions covered: (1) last convenience-store experience and what went wrong, (2
 
 **One unrealistic moment.** All four personas independently converge on near-identical phrasing ("set it and forget it", "pull real-time API data from convenience store apps", "fully automated") across separate turns. Real focus-group participants vary in vocabulary and emphasis; this uniformity is a hallucination artifact — the LLM echoes the same design concern in four voices instead of four genuinely different ones. The substance (friction concern) is realistic; the identical wording is not.
 
-### 4.5 Real users
-**[TO DO]** 3-5 dorm students use the app for one week. Suggested checks:
-1. Can they find each product in the store from the English description? (found / not found per item)
-2. Would they actually eat the planned meals? (rate each day 1-5; note rejected products)
-3. Is the weekly cost close to what they paid? (receipt vs plan)
-4. Is giving allergies and equipment acceptable? What would make them stop using it?
+### 4.5 Real students
+Details, screenshots and the full weekly plans: `docs/DEMO_PERSONAS.md`.
+
+**Method.** Four international students living in Korean dorms (two at Hanyang University Seoul, one at Hanyang
+ERICA in Ansan, one at Kyungpook National University) gave me their real situation: weekly budget, equipment,
+allergies, diet and the stores they can reach. I typed each profile in the Streamlit app ("In my own words" mode),
+plus my own. Each student then looked at their plan and gave a score from 1 to 5 on clarity, trust, usefulness
+and "would you really eat this week", with a short opinion (summarised in my words).
+
+| Student | Constraints | Plan cost | Verifier | Clarity | Trust | Usefulness | Would eat |
+|---|---|---|---|---:|---:|---:|---:|
+| Josselin | 55,000 KRW, 2 meals, fish allergy, GS25/CU only | 44,600 | all checks passed | 5 | 4 | 4 | 5 |
+| Joshua | 65,000 KRW, vegetarian, nut allergy | 64,900 | 4 days below nutrition targets | 3 | 3 | 2 | 2 |
+| Matheo | 50,000 KRW, 2 meals, no dairy, microwave only | 43,700 | all checks passed | 4 | 5 | 4 | 4 |
+| Timur | 85,000 KRW, egg allergy | 80,110 | all checks passed | 5 | 4 | 3 | 3 |
+| **Average** | | | | **4.25** | **4.00** | **3.25** | **3.50** |
+
+**Results.** Budget, allergens, equipment, diet and stores were respected in every plan. Clarity and trust are
+good: students like that their allergy and budget are handled without checking every product. Usefulness and
+"would eat" are lower because some meals are strange or repetitive (plain instant rice alone, candy with rice,
+the same sandwich six times for Joshua). Joshua, vegetarian with a nut allergy, has the fewest products to
+choose from and gave the lowest scores.
+
+**Bug found by this test.** In the first version of these plans, Josselin (fish allergy) received a salmon
+kimbap and a tuna kimbap. The allergen inference script had split allergen lists on commas, while the catalog
+uses semicolons: 150 products lost their allergens and the inferred lists could not be read, so the filter no
+longer protected allergic users. The unit and property tests did not catch it, because they check the filter
+logic, not the content of the allergen column. I restored the data, added two tests on the allergen column
+(valid vocabulary, no seafood offered to a fish-allergic user), and generated all plans again.
+
+**Other findings.** The rule-based parser does not understand "lactose intolerant" (only "lactose intolerance"
+or "can't eat dairy"); a shellfish allergy cannot be declared; the info banner of the app still says that
+sourced products have no allergen data.
+
+**Not done.** The students did not use the app for a full week: I did not check whether they could find the
+products in the store, or compare the plan cost with real receipts.
 
 ## 5. Limitations
-- **Data:** 145 of 378 products are sourced (38%); 233 have estimated nutrition (83 of them with an official price). Sourced rows have **no allergen data**
-  (excluded for allergic users) and **no plain protein foods** (eggs, chicken breast, tofu), so sourced-only plans
-  often miss the protein target. Prices are catalog reference prices, not shelf prices observed in one store.
+- **Data:** 150 of 390 products are sourced (38%); 240 have estimated nutrition (90 of them with an official price).
+  The allergens of the sourced products are **inferred from their names**, not read on the label: they can be
+  incomplete, so the app must keep its "check the package" notice. Sourced rows have **few plain protein foods**
+  (eggs, chicken breast), so sourced-only plans often miss the protein target. Prices are catalog reference
+  prices, not shelf prices observed in one store.
+- **Meal realism:** the optimizer sometimes fills calories with plain instant rice or candy, which students found
+  strange (section 4.5).
+- **Evaluation size:** the proposal planned 30 profiles x 3 systems plus an ablation; the benchmark covers 12
+  scenarios x 2 systems, and the student test has 4 students who looked at their plan without using it for a week.
 - **Optimality:** the search is time-limited (20 s); plans are good, not always optimal.
 - **Coverage:** only 1+1 and 2+1 promos; no halal certification data; prices vary by store and month.
 - **Persistence on the free hosting tier** is not durable.
 
 ## 6. Next steps
-1. Complete the data: allergen lines for the 98 sourced products, then protein foods and lunch boxes (labels in store,
-   or the MFDS Open API with a free data.go.kr key).
-2. Run the live notebook with real participants and paste focus group quotes (section 4.4).
-3. Test with real students (section 4.5) and adjust meal rules and explanations.
+1. Replace the inferred allergens of the 150 sourced products with label data (in store, or the MFDS Open API
+   with a free data.go.kr key), then add protein foods and lunch boxes.
+2. Add meal rules: at least 10 g of protein per meal and at most one snack per meal.
+3. Fix the parser ("lactose intolerant", shellfish) and the outdated allergen banner in the app.
+4. Run a full one-week test with the students: products found in store, real receipts versus plan cost.
