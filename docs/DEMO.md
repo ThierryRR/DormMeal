@@ -6,7 +6,8 @@
    nutrition charts, *Checks* tab (all passed) and the agent trace.
 3. **Low budget**: 50,000 KRW -> the plan stays within budget, and the Checks tab lists the days that miss
    a nutrition target (soft constraints, honest message).
-4. **Impossible case**: 5,000 KRW -> immediate explanation with the minimum cost.
+4. **Impossible case**: 10,000 KRW (the lowest budget the form accepts) -> immediate explanation with the
+   minimum cost ("21 meals need at least 18,700 KRW").
 5. **Replanning**: Today = Wed, next meal = lunch, "the microwave is broken" -> *Update my plan*: meals
    before Wednesday lunch are kept (locked), later meals no longer need a microwave.
 6. **Likes**: dislike a product -> plan again -> it is gone.

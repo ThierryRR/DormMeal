@@ -56,8 +56,8 @@ st.sidebar.caption("Free-text understanding: " + ("Gemini + rules" if llm.availa
 st.title("Plan my week")
 n_src = sum(p.verified for p in agent.catalog)
 st.info(f"Catalog: {n_src} products with sourced data (MFDS / manufacturer / Meokfit, reference prices) and "
-        f"{len(agent.catalog) - n_src} **estimated** products. Allergen information is missing for sourced products: "
-        "they are never proposed to users who declare an allergy.", icon="ℹ️")
+        f"{len(agent.catalog) - n_src} **estimated** products. Allergens of sourced products are inferred from "
+        "their names: always check the package if you have an allergy.", icon="ℹ️")
 sourced_only = st.checkbox("Use only products with sourced data (fewer choices, less protein)", value=False)
 
 constraints, text = None, ""
