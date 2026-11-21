@@ -101,6 +101,21 @@ def test_unknown_allergens_are_excluded_for_allergic_users():
     assert all(p.allergens_known for p in rows)
 
 
+def test_full_catalog_allergen_tokens_are_valid():
+    import csv
+    known = {"egg", "soy", "wheat", "milk", "fish", "shellfish", "pork", "beef", "chicken", "nuts", "sesame"}
+    with open(FULL, encoding="utf-8") as f:
+        raw = list(csv.DictReader(f))
+    assert not [r["product_id"] for r in raw if "," in r["allergens"]]
+    assert {a for p in load_catalog_csv(FULL) for a in p.allergens} <= known
+
+
+def test_seafood_products_are_not_offered_to_fish_allergic_users():
+    from dormmeal.tools import search_catalog
+    safe = search_catalog(load_catalog_csv(FULL), equipment=["microwave", "kettle", "fridge"], allergies=["fish"])
+    assert not [p.name_en for p in safe if any(w in p.name_en.lower() for w in ("tuna", "salmon", "anchovy"))]
+
+
 def test_sourced_only_filter():
     from dormmeal.models import Constraints
     from dormmeal.tools import search_for_constraints
