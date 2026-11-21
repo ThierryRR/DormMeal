@@ -1,6 +1,7 @@
 # DormMeal: final report
 
 *Author: Rosano Thierry. Repository state of 2026-11-21.*
+*Live app: https://dormmeal.streamlit.app. Code: https://github.com/ThierryRR/DormMeal*
 
 ## 1. Problem
 International students in Korean dorms often eat from convenience stores. They face four problems at the

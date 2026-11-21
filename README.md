@@ -1,6 +1,9 @@
 # DormMeal
 
 A convenience-store meal-planning agent for international students living in Korean dorms.
+
+**Live app:** https://dormmeal.streamlit.app
+
 You give a weekly budget, allergies, diet, kitchen equipment and the stores you can reach (CU, GS25, Emart24, 7-Eleven).
 DormMeal returns a 7-day plan, a shopping list per store with English shelf descriptions, and the daily
 nutrition. When something changes during the week (sold out, skipped meal, new budget, broken
