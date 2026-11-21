@@ -1,0 +1,37 @@
+[
+  {
+    "nickname": "thierry",
+    "name": "Thierry Rosano",
+    "university": "",
+    "story": "French exchange student in Computer Science, fall semester in Seoul. Lives in a dorm with a shared microwave and fridge on his floor, no kitchen. Goes to the gym three times a week and wants more protein than his usual ramyeon-and-kimbap routine.",
+    "request": "I have 70,000 won for the week, a microwave and a fridge. I eat 3 meals a day and I have no allergies."
+  },
+  {
+    "nickname": "josselin",
+    "name": "Josselin Tual",
+    "university": "Hanyang University, Seoul",
+    "story": "Mechanical engineering student who leaves early for lab sessions and never has time for breakfast. Lives in the same dorm as Thierry, with the shared microwave and fridge, and a kettle in the common room. He is allergic to fish and seafood and mostly shops at the GS25 and CU next to campus.",
+    "request": "My budget is 55,000 won a week. I have a microwave, a kettle and a fridge, I skip breakfast and I'm allergic to fish. I can go to GS25 and CU."
+  },
+  {
+    "nickname": "joshua",
+    "name": "Joshua Hoorpah",
+    "university": "Hanyang University, Seoul",
+    "story": "Business student, vegetarian for several years, with a peanut allergy. Shares a floor microwave and has a kettle in his room. Wants plans that are cheap but not the same rice ball every day.",
+    "request": "I'm vegetarian and allergic to nuts. I have 65,000 won for the week, a microwave, a kettle and a fridge."
+  },
+  {
+    "nickname": "matheo",
+    "name": "Matheo Suhr",
+    "university": "Hanyang University ERICA, Ansan",
+    "story": "First-year design student on a tight budget who works on projects late at night. Lactose intolerant. Only has access to the floor microwave and eats two meals a day.",
+    "request": "I have 50,000 won a week and only a microwave. I can't eat dairy (lactose intolerance) and I eat 2 meals a day."
+  },
+  {
+    "nickname": "timur",
+    "name": "Timur Hasanov",
+    "university": "Kyungpook National University",
+    "story": "Graduate student in data science with a part-time teaching assistant job, so a larger budget. Allergic to eggs. Has a microwave, a kettle and a fridge in a shared kitchen corner and shops at any of the four chains.",
+    "request": "Budget 85,000 won per week. I have a microwave, a kettle and a fridge, and I'm allergic to eggs."
+  }
+]
